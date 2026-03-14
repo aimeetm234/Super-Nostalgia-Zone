@@ -676,7 +676,7 @@ function PlayerDataStore.new()
 		end 
 	end
 	game.Players.PlayerAdded:Connect(HandlePlayer)
-	for _, player in pairs(game.Players:GetChildren()) do
+	for _, player in pairs(game.Players:GetPlayers()) do
 		if player:IsA('Player') then
 			HandlePlayer(player)
 		end
