@@ -1,3 +1,4 @@
+local RunService = game:GetService("RunService")
 return
 {
     Style =
@@ -50,7 +51,7 @@ return
         {
             Name = "Exit";
             Label = " Exit";
-            Enabled = true;
+            Enabled = not RunService:IsStudio();
         }
     }
 }
