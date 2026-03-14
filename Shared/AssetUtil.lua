@@ -54,7 +54,7 @@ function AssetUtil:RequestImage(assetId)
 	assert(assetId > 0)
 
 	if self.TextureCache[assetId] == nil then
-		local success, response = self:SafeCall(MarketplaceService, "GetProductInfo", assetId)
+		local success, response = self:SafeCall(MarketplaceService, "GetProductInfoAsync", assetId)
 		if success then
 			local result
             
@@ -63,7 +63,7 @@ function AssetUtil:RequestImage(assetId)
                 
 				if assetType == "Image" then -- No transformation needed!
 					result = "rbxassetid://" .. assetId
-				elseif assetType == "TeeShirt" then
+				elseif assetType == "TShirt" then
 					local imported, shirtGraphic = self:Import(assetId)
 					
 					if imported then
