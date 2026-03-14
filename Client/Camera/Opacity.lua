@@ -148,7 +148,7 @@ function module:Update()
 		if not Enabled then
 			instant = true
 		else
-			local distance = (currentCamera.Focus.p - currentCamera.CFrame.p).Magnitude
+			local distance = (currentCamera.Focus.Position - currentCamera.CFrame.Position).Magnitude
 			if distance < 2 then
 				transparency = 1
 			elseif distance < 6 then

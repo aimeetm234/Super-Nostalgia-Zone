@@ -17,7 +17,7 @@ local platformOffset = Vector3.new(0, -.5, 0)
 
 while wait() do
 	local start = rootPart.CFrame
-	local startPos = start.p
+	local startPos = start.Position
 	local startRay = Ray.new(startPos, start.LookVector * 5)
 	
 	local hit, pos, norm = workspace:FindPartOnRay(startRay, char)

@@ -117,7 +117,7 @@ end
 
 function this:GetSubjectPosition()
 	local camera = workspace.CurrentCamera
-	local result = camera.Focus.p
+	local result = camera.Focus.Position
 	
 	local cameraSubject = camera and camera.CameraSubject
 	if cameraSubject then
@@ -162,7 +162,7 @@ end
 function this:GetCameraActualZoom()
 	local camera = workspace.CurrentCamera
 	if camera then
-		return (camera.CFrame.p - camera.Focus.p).Magnitude
+		return (camera.CFrame.Position - camera.Focus.Position).Magnitude
 	end
 end
 
@@ -1000,7 +1000,7 @@ do
 
 			if TeleportService:GetTeleportSetting("FollowCamera") then
 				if self.LastCameraTransform and not self:IsInFirstPerson() then
-					local lastVec = -(self.LastCameraTransform.p - subjectPosition)
+					local lastVec = -(self.LastCameraTransform.Position - subjectPosition)
 					local y = findAngleBetweenXZVectors(lastVec, self:GetCameraLook())
 					-- Check for NaNs
 					if IsFinite(y) and math.abs(y) > 0.0001 then

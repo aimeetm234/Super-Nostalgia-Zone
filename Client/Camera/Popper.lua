@@ -64,6 +64,58 @@ local function OnPlayersChildRemoved(child)
 	end
 end
 
+---------------------------------------------------------------------------------
+-- Credits to crusherfire for these two functions
+-- https://devforum.roblox.com/t/cameragetlargestcutoffdistance-source/2071917/5 
+---------------------------------------------------------------------------------
+local function GetLargestCutoffDistance(currentFocus: CFrame, goalCFrame: CFrame, collisionRadius: number, ignoreList: { any }?): number
+	local origin = currentFocus.Position
+
+	local params = RaycastParams.new()
+	params.FilterDescendantsInstances = ignoreList or {}
+	params.FilterType = Enum.RaycastFilterType.Exclude
+
+	-- Camera bounds
+	local cameraOffsets = {
+		Vector3.new(0, 0, 0), -- camera center
+		Vector3.new(collisionRadius, 0, 0), -- right of the camera
+		Vector3.new(-collisionRadius, 0, 0), -- left of the camera
+	}
+
+	local largestCutoffDistance = 0
+
+	for _, offset in ipairs(cameraOffsets) do
+		local correctedGoalCFrame = goalCFrame * CFrame.new(offset)
+		local direction = ((correctedGoalCFrame.Position) - currentFocus.Position)
+		local result: RaycastResult = workspace:Raycast(origin, direction, params)
+
+		if not result then
+			continue
+		end
+		local distance = (result.Position - correctedGoalCFrame.Position).Magnitude
+		if distance > largestCutoffDistance then
+			largestCutoffDistance = distance
+		end
+	end
+
+	return largestCutoffDistance
+end
+
+local function GetCollisionRadius(): number
+	local camera = workspace.CurrentCamera
+	local viewportSize = camera.ViewportSize
+	local aspectRatio = viewportSize.X / viewportSize.Y
+	local fovRads = math.rad(camera.FieldOfView)
+	local imageHeight = math.tan(fovRads) * math.abs(camera.NearPlaneZ)
+	local imageWidth = imageHeight * aspectRatio
+
+	local cornerPos = Vector3.new(imageWidth, imageHeight, camera.NearPlaneZ)
+	return cornerPos.Magnitude
+end
+---------------------------------------------------------------------------------
+-- End of crusherfire functions
+---------------------------------------------------------------------------------
+
 -------------------------
 --| Exposed Functions |--
 -------------------------
@@ -78,11 +130,12 @@ function PopperCam:Update()
 		end
 		
 		local cameraCFrame = Camera.CFrame
-		local focusPoint = Camera.Focus.p
-
+		local collisionRadius = GetCollisionRadius()
+		local focus = Camera.Focus
 		if SubjectPart then
-			focusPoint = SubjectPart.CFrame.p
+			focus = SubjectPart.CFrame
 		end
+		local focusPoint = focus.Position
 
 		local ignoreList = {}
 		for _, character in pairs(PlayerCharacters) do
@@ -93,11 +146,11 @@ function PopperCam:Update()
 		end
 		
 		-- Get largest cutoff distance
-		local largest = Camera:GetLargestCutoffDistance(ignoreList)
+		local largest = GetLargestCutoffDistance(focus, cameraCFrame, collisionRadius, ignoreList)
 
 		-- Then check if the player zoomed since the last frame,
 		-- and if so, reset our pop history so we stop tweening
-		local zoomLevel = (cameraCFrame.p - focusPoint).Magnitude
+		local zoomLevel = (cameraCFrame.Position - focusPoint).Magnitude
 		if math_abs(zoomLevel - LastZoomLevel) > 0.001 then
 			LastPopAmount = 0
 		end

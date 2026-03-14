@@ -24,7 +24,7 @@ local c = workspace.CurrentCamera
 local currentlyDown
 
 local function updateCameraStatus()
-	local dist = (c.Focus.p - c.CFrame.p).Magnitude
+	local dist = (c.Focus.Position - c.CFrame.Position).Magnitude
 	firstPersonIndicator.Visible = (dist <= 1.5)
 	zoomLock.Visible = (dist <= 1)
 end

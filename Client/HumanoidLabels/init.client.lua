@@ -61,7 +61,7 @@ local function setupHumanoid(h)
 				local c = workspace.CurrentCamera
 				
 				local function update()
-					local dist = (c.CFrame.p - head.Position).Magnitude
+					local dist = (c.CFrame.Position - head.Position).Magnitude
 					local fontSize = 12
 					
 					if dist < 20 then
