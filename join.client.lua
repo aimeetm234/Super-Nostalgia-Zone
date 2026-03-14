@@ -195,7 +195,7 @@ RunService:BindToRenderStep("LoadingState", 1000, updateLoadingState)
 coroutine.wrap(function ()
 	local function setCoreSafe(method, ...)
 		while not pcall(StarterGui.SetCore, StarterGui, method, ...) do
-			RunService.Heartbeat:Wait()
+			RunService.PostSimulation:Wait()
 		end
 	end
 	
@@ -232,7 +232,7 @@ do
 end
 
 while loading do
-	RunService.Heartbeat:Wait()
+	RunService.PostSimulation:Wait()
 end
 
 if not player.Character then
