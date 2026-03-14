@@ -74,6 +74,8 @@ local soundActions =
 			jumping:Stop()
 		end)
 	end);
+	
+	Died = setSoundId("79348298352567", nil, true);
 }
 
 local function onSoundMounted(humanoid)
