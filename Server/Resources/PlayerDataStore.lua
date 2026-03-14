@@ -187,11 +187,7 @@ end
 
 -- Spawn a new thread and run it immedately up to
 -- the first yield before returning
-local function SpawnNow(func)
-	local ev = Instance.new('BindableEvent')
-	ev.Event:Connect(func)
-	ev:Fire()
-end
+local SpawnNow = task.spawn
 	
 --===============================================--
 --==              SaveData Class               ==--

@@ -113,7 +113,7 @@ local function onCharacterAdded(char)
 	end
 	
 	local function onDescendantAdded(desc)
-		if desc:IsA("CharacterMesh") and not desc.Name:sub(1, 3) == "CL_" then
+		if desc:IsA("CharacterMesh") and desc.Name:sub(1, 3) ~= "CL_" then
 			safeDestroy(desc)
 		elseif desc:IsA("Accoutrement") then
 			-- Safe way to deter non-game accessories, since I name them by their AssetId

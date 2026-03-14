@@ -30,15 +30,15 @@ local function onExplosionHit(hit)
 end
 
 function fly()
-	direction = shaft.CFrame.LookVector
+	local direction = shaft.CFrame.LookVector
 	position = position + direction
-	error = position - shaft.Position
+	local error = position - shaft.Position
 	shaft.AssemblyLinearVelocity = 7*error
 end
 
 function blow()
 	swoosh:Stop()
-	explosion = Instance.new("Explosion")
+	local explosion = Instance.new("Explosion")
 	explosion.Position = shaft.Position
 	explosion.Parent = game.Workspace
 	explosion.Hit:Connect(onExplosionHit)

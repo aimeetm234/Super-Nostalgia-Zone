@@ -4,15 +4,15 @@ shaft = script.Parent
 position = shaft.Position
 
 function fly()
-	direction = shaft.CFrame.LookVector 
+	local direction = shaft.CFrame.LookVector 
 	position = position + 35*direction
-	error = position - shaft.Position
+	local error = position - shaft.Position
 	shaft.AssemblyLinearVelocity = 5*error
 end
 
 function blow()
 	swoosh:Stop()
-	explosion = Instance.new("Explosion")
+	local explosion = Instance.new("Explosion")
 	explosion.Position = shaft.Position
 	explosion.BlastRadius = 10
 

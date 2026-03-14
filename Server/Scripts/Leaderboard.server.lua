@@ -1,6 +1,9 @@
 print("LinkedLeaderboard script version 5.00 loaded")
 
+local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
+local Workspace = game:GetService("Workspace")
+
 local loadConfig = ServerStorage:FindFirstChild("LoadLeaderboard")
 local hasLoadConfig = (loadConfig ~= nil)
 
@@ -15,36 +18,7 @@ end
 stands = {}
 CTF_mode = false
 
-function onHumanoidDied(humanoid, player)
-	local stats = player:FindFirstChild("leaderstats")
-	if stats ~= nil then
-		local deaths = stats:FindFirstChild("Wipeouts")
-		deaths.Value = deaths.Value + 1
-
-		-- do short dance to try and find the killer
-
-		local killer = getKillerOfHumanoidIfStillInGame(humanoid)
-
-		handleKillCount(humanoid, player)
-	end
-end
-
-function onPlayerRespawn(property, player)
-	-- need to connect to new humanoid
-	
-	if property == "Character" and player.Character ~= nil then
-		local humanoid = player.Character.Humanoid
-		local deathCon
-			local p = player
-			local h = humanoid
-			deathCon = humanoid.Died:Connect(function ()
-				deathCon:Disconnect()
-				onHumanoidDied(h, p) 
-			end)
-	end
-end
-
-function getKillerOfHumanoidIfStillInGame(humanoid)
+local function getKillerOfHumanoidIfStillInGame(humanoid)
 	-- returns the player object that killed this humanoid
 	-- returns nil if the killer is no longer in the game
 
@@ -53,9 +27,8 @@ function getKillerOfHumanoidIfStillInGame(humanoid)
 
 	-- find player with name on tag
 	if tag ~= nil then
-		
 		local killer = tag.Value
-		if killer.Parent ~= nil then -- killer still in game
+		if killer ~= nil and killer.Parent ~= nil then -- killer still in game
 			return killer
 		end
 	end
@@ -63,19 +36,45 @@ function getKillerOfHumanoidIfStillInGame(humanoid)
 	return nil
 end
 
-function handleKillCount(humanoid, player)
-	local killer = getKillerOfHumanoidIfStillInGame(humanoid)
-	if killer ~= nil then
-		local stats = killer:FindFirstChild("leaderstats")
-		if stats ~= nil then
-			local kills = stats:FindFirstChild("KOs")
+local function handleKillCount(killer, player)
+	local stats = killer:FindFirstChild("leaderstats")
+	if stats ~= nil then
+		local kills = stats:FindFirstChild("KOs")
+		if kills ~= nil then
 			if killer ~= player then
 				kills.Value = kills.Value + 1
-				
 			else
 				kills.Value = kills.Value - 1
-				
 			end
+		end
+	end
+end
+
+local function onHumanoidDied(humanoid, player)
+	local stats = player:FindFirstChild("leaderstats")
+	if stats ~= nil then
+		local deaths = stats:FindFirstChild("Wipeouts")
+		if deaths ~= nil then
+			deaths.Value = deaths.Value + 1
+		end
+
+		-- do short dance to try and find the killer
+		local killer = getKillerOfHumanoidIfStillInGame(humanoid)
+		if killer ~= nil then
+			handleKillCount(killer, player)
+		end
+	end
+end
+
+local function onPlayerRespawn(property, player)
+	-- need to connect to new humanoid
+
+	if property == "Character" and player.Character ~= nil then
+		local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+		if humanoid ~= nil then
+			humanoid.Died:Once(function()
+				onHumanoidDied(humanoid, player) 
+			end)
 		end
 	end
 end
@@ -84,11 +83,10 @@ end
 -----------------------------------------------
 
 
-
-function findAllFlagStands(root)
-	local c = root:children()
+local function findAllFlagStands(root)
+	local c = root:GetChildren()
 	for i=1,#c do
-		if (c[i].ClassName == "Model" or c[i].ClassName == "Part") then
+		if (c[i].ClassName == "Model" or c[i]:IsA("BasePart")) then
 			findAllFlagStands(c[i])
 		end
 		if (c[i].ClassName == "FlagStand") then
@@ -97,23 +95,28 @@ function findAllFlagStands(root)
 	end
 end
 
-function hookUpListeners()
+local function onCaptureScored(player)
+	local ls = player:FindFirstChild("leaderstats")
+	if ls == nil then return end
+	local caps = ls:FindFirstChild("Captures")
+	if caps == nil then return end
+	caps.Value = caps.Value + 1
+end
+
+local function hookUpListeners()
 	for i=1,#stands do
 		stands[i].FlagCaptured:Connect(onCaptureScored)
 	end
 end
 
-function onPlayerEntered(newPlayer)
+local function onPlayerEntered(newPlayer)
+	local stats = Instance.new("IntValue")
+	stats.Name = "leaderstats"
 
 	if CTF_mode == true then
-
-		local stats = Instance.new("IntValue")
-		stats.Name = "leaderstats"
-
 		local captures = Instance.new("IntValue")
 		captures.Name = "Captures"
 		captures.Value = 0
-
 
 		captures.Parent = stats
 
@@ -124,14 +127,7 @@ function onPlayerEntered(newPlayer)
 			if newPlayer.Character ~= nil then break end
 			wait(5)
 		end
-
-		stats.Parent = newPlayer
-
 	else
-
-		local stats = Instance.new("IntValue")
-		stats.Name = "leaderstats"
-
 		local kills = Instance.new("IntValue")
 		kills.Name = "KOs"
 		kills.Value = 0
@@ -151,44 +147,27 @@ function onPlayerEntered(newPlayer)
 			wait(0.5)
 		end
 
-		local deathCon
-		local humanoid = newPlayer.Character.Humanoid
-		
-		deathCon = humanoid.Died:Connect(function() 
-			deathCon:Disconnect()
-			onHumanoidDied(humanoid, newPlayer) 
-		end )
+		local humanoid = newPlayer.Character:FindFirstChildOfClass("Humanoid")
+		if humanoid ~= nil then
+			humanoid.Died:Once(function ()
+				onHumanoidDied(humanoid, newPlayer) 
+			end)
+		end
 
 		-- start to listen for new humanoid
 		newPlayer.Changed:Connect(function(property) onPlayerRespawn(property, newPlayer) end )
-
-
-		stats.Parent = newPlayer
-
 	end
 
+	stats.Parent = newPlayer
 end
 
 
-function onCaptureScored(player)
-
-		local ls = player:FindFirstChild("leaderstats")
-		if ls == nil then return end
-		local caps = ls:FindFirstChild("Captures")
-		if caps == nil then return end
-		caps.Value = caps.Value + 1
-
-end
-
-
-findAllFlagStands(game.Workspace)
+findAllFlagStands(Workspace)
 hookUpListeners()
 if (#stands > 0) then CTF_mode = true end
 
-for _,v in pairs(game.Players:GetPlayers()) do
+for _,v in pairs(Players:GetPlayers()) do
 	onPlayerEntered(v)
 end
 
-game.Players.ChildAdded:Connect(onPlayerEntered)
-
-
+Players.PlayerAdded:Connect(onPlayerEntered)

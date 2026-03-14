@@ -133,7 +133,7 @@ function Activated()
 		return
 	end
 	Tool.Enabled = false
-	connection = Handle.Touched:Connect(Blow)
+	local connection = Handle.Touched:Connect(Blow)
 	Lunge()
 	wait(0.4)
 	connection:Disconnect()
