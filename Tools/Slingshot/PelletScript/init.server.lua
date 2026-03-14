@@ -1,4 +1,4 @@
-local debris = game:service("Debris")
+local debris = game:GetService("Debris")
 pellet = script.Parent
 damage = 8
 
@@ -10,14 +10,14 @@ end
 
 function tagHumanoid(humanoid)
 	-- todo: make tag expire
-	local tag = pellet:findFirstChild("creator")
+	local tag = pellet:FindFirstChild("creator")
 	if tag ~= nil then
 		-- kill all other tags
-		while(humanoid:findFirstChild("creator") ~= nil) do
-			humanoid:findFirstChild("creator").Parent = nil
+		while(humanoid:FindFirstChild("creator") ~= nil) do
+			humanoid:FindFirstChild("creator").Parent = nil
 		end
 
-		local new_tag = tag:clone()
+		local new_tag = tag:Clone()
 		new_tag.Parent = humanoid
 		debris:AddItem(new_tag, 1)
 	end
@@ -45,19 +45,19 @@ function onTouched(hit)
 	else
 		damage = damage / 2
 		if damage < 1 then
-			connection:disconnect()
+			connection:Disconnect()
 			pellet.Parent = nil
 		end
 	end
 end
 
-connection = pellet.Touched:connect(onTouched)
+connection = pellet.Touched:Connect(onTouched)
 
-r = game:service("RunService")
-t, s = r.Stepped:wait()
+r = game:GetService("RunService")
+t, s = r.Stepped:Wait()
 d = t + 2.0 - s
 while t < d do
-	t = r.Stepped:wait()
+	t = r.Stepped:Wait()
 end
 
 pellet.Parent = nil

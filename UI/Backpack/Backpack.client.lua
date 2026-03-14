@@ -89,7 +89,7 @@ local function onInputBegan(input,gameProcessed)
 	end
 end
 
-UserInputService.InputBegan:connect(onInputBegan)
+UserInputService.InputBegan:Connect(onInputBegan)
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ local function createSlot(tool)
 		local index = #tools + 1
 		tools[index] = tool
 		
-		local slot = slotTemp:clone()
+		local slot = slotTemp:Clone()
 		slot.Name = tool.Name
 		slot.Parent = slotsBin
 		

@@ -227,5 +227,5 @@ for _,v in pairs(Players:GetPlayers()) do
 	onPlayerAdded(v)
 end
 
-Players.PlayerAdded:connect(onPlayerAdded)
+Players.PlayerAdded:Connect(onPlayerAdded)
 requestCharacter.OnServerEvent:Connect(onRequestCharacter)

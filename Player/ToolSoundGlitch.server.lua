@@ -15,13 +15,13 @@ local function processHandle(handle)
 			else
 				local replica = child:Clone()
 				replica.Name = "ToolSoundGlitch"
-				replica.MaxDistance = 0
+				replica.RollOffMaxDistance = 0
 				replica.Parent = torso
 				
 				CollectionService:AddTag(replica, "ToolSoundGlitch")
 				replica:Play()
 				
-				replica.Ended:connect(function ()
+				replica.Ended:Connect(function ()
 					Debris:AddItem(replica, 1)
 				end)
 			end
@@ -39,5 +39,5 @@ local function onChild(child)
 	end
 end
 
-char.ChildAdded:connect(onChild)
-char.ChildRemoved:connect(onChild)
+char.ChildAdded:Connect(onChild)
+char.ChildRemoved:Connect(onChild)

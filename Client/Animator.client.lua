@@ -88,7 +88,7 @@ local function createAnimator(humanoid)
 			
 			if pose == "Running" then
 				local speed = humanoid.WalkSpeed
-				local movement = (Torso.Velocity * Vector3.new(1, 0, 1)).Magnitude
+				local movement = (Torso.AssemblyLinearVelocity * Vector3.new(1, 0, 1)).Magnitude
 				
 				if (speed * movement) < 1 then
 					pose = "Standing"

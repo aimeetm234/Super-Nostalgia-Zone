@@ -74,10 +74,10 @@ function Propel(Part)
 	if character == Character then
 		return
 	end
-	local Direction = (Part.Position - Torso.Position).unit
+	local Direction = (Part.Position - Torso.Position).Unit
 	Direction = Direction + Vector3.new(0, 1, 0)
 	Direction = Direction * 200
-	Part.Velocity = Part.Velocity + Direction
+	Part.AssemblyLinearVelocity = Part.AssemblyLinearVelocity + Direction
 end
 
 function Explode(Part)
@@ -85,14 +85,14 @@ function Explode(Part)
 		return
 	end
 	Debounce = true
-	local Direction = (Part.Position - Torso.Position).unit
+	local Direction = (Part.Position - Torso.Position).Unit
 	local Position = Direction * 12 + Torso.Position
 	local Explosion = Instance.new("Explosion")
 	Explosion.ExplosionType = Enum.ExplosionType.NoCraters
 	Explosion.BlastRadius = 4
 	Explosion.BlastPressure = 1
 	Explosion.Position = Position	
-	Explosion.Hit:connect(function(Part, Distance)
+	Explosion.Hit:Connect(function(Part, Distance)
 		Propel(Part)
 	end)
 	local owner = Instance.new("ObjectValue")
@@ -118,12 +118,12 @@ end
 function Lunge()
 	Attack()
 	local Force = Instance.new("BodyPosition")
-	Force.maxForce = Vector3.new(1e+005, 1e+004, 1e+005)
-	local Direction = Humanoid.targetPoint
-	if ((Direction - Handle.Position).magnitude > 15) then
+	Force.MaxForce = Vector3.new(1e+005, 1e+004, 1e+005)
+	local Direction = Humanoid.TargetPoint
+	if ((Direction - Handle.Position).Magnitude > 15) then
 		return
 	end
-	Force.position = Direction
+	Force.Position = Direction
 	Debris:AddItem(Force, 0.25)
 	Force.Parent = Handle
 end
@@ -133,10 +133,10 @@ function Activated()
 		return
 	end
 	Tool.Enabled = false
-	connection = Handle.Touched:connect(Blow)
+	connection = Handle.Touched:Connect(Blow)
 	Lunge()
 	wait(0.4)
-	connection:disconnect()
+	connection:Disconnect()
 	Tool.Enabled = true
 end
 
@@ -154,5 +154,5 @@ function Equipped()
 	end
 end
 
-Tool.Activated:connect(Activated)
-Tool.Equipped:connect(Equipped)
+Tool.Activated:Connect(Activated)
+Tool.Equipped:Connect(Equipped)

@@ -91,9 +91,9 @@ local mirrorProps =
 	"Material",
 	"Name",
 	"Reflectance",
-	"RotVelocity",
+	"AssemblyAngularVelocity",
 	"Transparency",
-	"Velocity",
+	"AssemblyLinearVelocity",
 }
 
 local surfaceProps =

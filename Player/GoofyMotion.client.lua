@@ -41,7 +41,7 @@ local function update()
 		local dir
 		
 		if zoom <= 1.5 then
-			dir = c.CFrame.lookVector
+			dir = c.CFrame.LookVector
 		else
 			bg.Parent = nil
 		end
@@ -60,7 +60,7 @@ local function update()
 		bg.Parent = nil
 	end
 	
-	if rootPart.Velocity.Magnitude > velocityThreshold and not seatPart then
+	if rootPart.AssemblyLinearVelocity.Magnitude > velocityThreshold and not seatPart then
 		humanoid:ChangeState("FallingDown")
 	end
 end

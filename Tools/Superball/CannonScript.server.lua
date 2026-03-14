@@ -6,7 +6,7 @@ function fire(direction)
 	Tool.Handle.Boing:Play()
 
 	local vCharacter = Tool.Parent
-	local vPlayer = game.Players:playerFromCharacter(vCharacter)
+	local vPlayer = game.Players:GetPlayerFromCharacter(vCharacter)
 
 	local missile = Instance.new("Part")       
 
@@ -16,7 +16,7 @@ function fire(direction)
 
 	missile.Position = spawnPos
 	missile.Size = Vector3.new(2,2,2)
-	missile.Velocity = direction * 200
+	missile.AssemblyLinearVelocity = direction * 200
 	missile.BrickColor = BrickColor.random() 
 	missile.Shape = 0
 	missile.BottomSurface = 0
@@ -24,9 +24,9 @@ function fire(direction)
 	missile.Name = "Cannon Shot"
 	missile.Reflectance = .2
 	missile.CustomPhysicalProperties = PhysicalProperties.new(1,0,1)
-	Tool.Handle.Boing:clone().Parent = missile
+	Tool.Handle.Boing:Clone().Parent = missile
 	
-	local new_script = script.Parent.CannonBall:clone()
+	local new_script = script.Parent.CannonBall:Clone()
 	new_script.Disabled = false
 	new_script.Parent = missile
 
@@ -54,12 +54,12 @@ function onActivated()
 		return 
 	end
 	local targetPos = humanoid.TargetPoint
-	local lookAt = (targetPos - character.Head.Position).unit
+	local lookAt = (targetPos - character.Head.Position).Unit
 	fire(lookAt)
 	wait(2)
 	Tool.Enabled = true
 end
 
 
-Tool.Activated:connect(onActivated)
+Tool.Activated:Connect(onActivated)
 

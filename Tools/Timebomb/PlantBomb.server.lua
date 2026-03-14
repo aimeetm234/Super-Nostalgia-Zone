@@ -6,11 +6,11 @@ function plant()
 	local bomb2 = Instance.new("Part")
    
 	local vCharacter = Tool.Parent
-	local vPlayer = game.Players:playerFromCharacter(vCharacter)
+	local vPlayer = game.Players:GetPlayerFromCharacter(vCharacter)
 
 	local spawnPos = Bomb.Position
 
-	bomb2.Position = Vector3.new(spawnPos.x, spawnPos.y+3, spawnPos.z)
+	bomb2.Position = Vector3.new(spawnPos.X, spawnPos.Y+3, spawnPos.Z)
 	bomb2.Size = Vector3.new(2,2,2)
 	
 	bomb2.BrickColor = BrickColor.new(21)
@@ -28,7 +28,7 @@ function plant()
 
 	bomb2.Parent = game.Workspace
 	bomb2:SetNetworkOwner(vPlayer)
-	local new_script = bombScript:clone()
+	local new_script = bombScript:Clone()
 	new_script.Disabled = false
 	new_script.Parent = bomb2
 end
@@ -65,5 +65,5 @@ function onUnequipped()
 end
 
 
-Tool.Activated:connect(onActivated)
-Tool.Unequipped:connect(onUnequipped)
+Tool.Activated:Connect(onActivated)
+Tool.Unequipped:Connect(onUnequipped)

@@ -113,10 +113,10 @@ local function processExplosion(explosion)
 				--	: delta.direction();
 				local normal = (delta == Vector3.new(0, 0, 0))
 				               and Vector3.new(0, 1, 0)
-				               or  delta.unit
+				               or  delta.Unit
 				
 				--float radius = p->getRadius();
-				local radius = p.Size.magnitude / 2				
+				local radius = p.Size.Magnitude / 2				
 				
 				--float surfaceArea = radius * radius;
 				local surfaceArea = radius * radius
@@ -134,9 +134,9 @@ local function processExplosion(explosion)
 				end				
 				
 				--p->getBody()->accumulateLinearImpulse(impulse, p->getCoordinateFrame().translation);
-				local currentVelocity = p.Velocity
-				local deltaVelocity = impulse / p:GetMass() -- m * del-v = F * del-t = Impulse
-				local forceNeeded = workspace.Gravity * p:GetMass() -- F = ma
+				local currentVelocity = p.AssemblyLinearVelocity
+				local deltaVelocity = impulse / p.Mass -- m * del-v = F * del-t = Impulse
+				local forceNeeded = workspace.Gravity * p.Mass -- F = ma
 				
 				local bodyV = Instance.new('BodyVelocity')
 				bodyV.Velocity = currentVelocity + deltaVelocity
@@ -147,9 +147,9 @@ local function processExplosion(explosion)
 				
 				--p->getBody()->accumulateRotationalImpulse(impulse * 0.5 * radius); // a somewhat arbitrary, but nice torque
 				local rotImpulse = impulse * 0.5 * radius
-				local currentRotVelocity = p.RotVelocity
+				local currentRotVelocity = p.AssemblyAngularVelocity
 				
-				local momentOfInertia = (2 * p:GetMass() * radius * radius / 5) -- moment of inertia = 2/5*m*r^2 (assuming roughly spherical)
+				local momentOfInertia = (2 * p.Mass * radius * radius / 5) -- moment of inertia = 2/5*m*r^2 (assuming roughly spherical)
 				local deltaRotVelocity = rotImpulse / momentOfInertia 
 				local torqueNeeded = 20 * momentOfInertia -- torque = r x F, want about alpha = 20 rad/s^2, alpha * P = torque
 					

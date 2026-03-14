@@ -23,10 +23,10 @@ function onStart()
 	
 	thrust.Parent = head
 	
-	thrust.velocity = Vector3.new(0,velocity,0)
-	thrust.maxForce = Vector3.new(0,4e+003,0) 
+	thrust.Velocity = Vector3.new(0,velocity,0)
+	thrust.MaxForce = Vector3.new(0,4e+003,0) 
 	
-	local sound = head:findFirstChild("JetbootSound")
+	local sound = head:FindFirstChild("JetbootSound")
 	if sound == nil then 
 		sound = Instance.new("Sound")
 		sound.Name = "JetbootSound"
@@ -34,7 +34,7 @@ function onStart()
 		sound.Looped = true
 		sound.Parent = head
 	end
-	sound:play()
+	sound:Play()
 
 end
 
@@ -44,8 +44,8 @@ function onDeactivated()
 	local head = char:WaitForChild("Head")
 	walking = false
 	thrust.Parent = nil
-	local sound = head:findFirstChild("JetbootSound")
-	if sound ~= nil then sound:stop() end
+	local sound = head:FindFirstChild("JetbootSound")
+	if sound ~= nil then sound:Stop() end
 	bin.Enabled = false
 	wait(reloadtime)
 	bin.Enabled = true
@@ -66,7 +66,7 @@ function onActivated()
 		wait(.2)
 		time = time + .2
 		velocity = (max_velocity * (time / flight_time)) + 3 
-		thrust.velocity = Vector3.new(0,velocity,0)
+		thrust.Velocity = Vector3.new(0,velocity,0)
 
 		if time > flight_time then onDeactivated() end
 	end

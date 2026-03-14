@@ -42,8 +42,8 @@ local function restoreFlag(flag)
 			* CFrame.new(0, flagStand.Size.Y / 2, 0)
 			* CFrame.new(0, flag.Size.Y / 2, 0)
 		
-		flag.Velocity = Vector3.new()
-		flag.RotVelocity = Vector3.new()
+		flag.AssemblyLinearVelocity = Vector3.new()
+		flag.AssemblyAngularVelocity = Vector3.new()
 
 		wait()
 
@@ -94,7 +94,7 @@ local function mountFlagAsTool(flag, humanoid)
 			
 			if rootPart then
 				local cf = rootPart.CFrame * CFrame.new(0, 4, -8)
-				flag.RotVelocity = Vector3.new(1, 1, 1)
+				flag.AssemblyAngularVelocity = Vector3.new(1, 1, 1)
 				flag.Position = cf.Position
 			end
 		end

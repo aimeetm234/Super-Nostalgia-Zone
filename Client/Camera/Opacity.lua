@@ -33,22 +33,22 @@ local function TeardownTransparency()
 	LastTransparency = nil
 
 	if DescendantAddedConn then
-		DescendantAddedConn:disconnect()
+		DescendantAddedConn:Disconnect()
 		DescendantAddedConn = nil
 	end
 	
 	if DescendantRemovingConn then
-		DescendantRemovingConn:disconnect()
+		DescendantRemovingConn:Disconnect()
 		DescendantRemovingConn = nil
 	end
 	
 	for object, conn in pairs(ToolDescendantAddedConns) do
-		conn:disconnect()
+		conn:Disconnect()
 		ToolDescendantAddedConns[object] = nil
 	end
 	
 	for object, conn in pairs(ToolDescendantRemovingConns) do
-		conn:disconnect()
+		conn:Disconnect()
 		ToolDescendantRemovingConns[object] = nil
 	end
 end
@@ -60,7 +60,7 @@ local function SetupTransparency(character)
 		DescendantAddedConn:Disconnect() 
 	end
 	
-	DescendantAddedConn = character.DescendantAdded:connect(function (object)
+	DescendantAddedConn = character.DescendantAdded:Connect(function (object)
 		-- This is a part we want to invisify
 		if IsValidPartToModify(object) then
 			CachedParts[object] = true
@@ -71,7 +71,7 @@ local function SetupTransparency(character)
 				ToolDescendantAddedConns[object]:Disconnect() 
 			end
 			
-			ToolDescendantAddedConns[object] = object.DescendantAdded:connect(function (toolChild)
+			ToolDescendantAddedConns[object] = object.DescendantAdded:Connect(function (toolChild)
 				CachedParts[toolChild] = nil
 				if toolChild:IsA('BasePart') or toolChild:IsA('Decal') then
 					-- Reset the transparency
@@ -83,7 +83,7 @@ local function SetupTransparency(character)
 				ToolDescendantRemovingConns[object]:Disconnect() 
 			end
 			
-			ToolDescendantRemovingConns[object] = object.DescendantRemoving:connect(function (formerToolChild)
+			ToolDescendantRemovingConns[object] = object.DescendantRemoving:Connect(function (formerToolChild)
 				wait() -- wait for new parent
 				if character and formerToolChild and formerToolChild:IsDescendantOf(character) then
 					if IsValidPartToModify(formerToolChild) then
@@ -99,7 +99,7 @@ local function SetupTransparency(character)
 		DescendantRemovingConn:Disconnect()
 	end
 	
-	DescendantRemovingConn = character.DescendantRemoving:connect(function (object)
+	DescendantRemovingConn = character.DescendantRemoving:Connect(function (object)
 		if CachedParts[object] then
 			CachedParts[object] = nil
 			-- Reset the transparency
@@ -148,7 +148,7 @@ function module:Update()
 		if not Enabled then
 			instant = true
 		else
-			local distance = (currentCamera.Focus.p - currentCamera.CFrame.p).magnitude
+			local distance = (currentCamera.Focus.p - currentCamera.CFrame.p).Magnitude
 			if distance < 2 then
 				transparency = 1
 			elseif distance < 6 then

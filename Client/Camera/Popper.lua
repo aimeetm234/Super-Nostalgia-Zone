@@ -49,7 +49,7 @@ end
 
 local function OnPlayersChildAdded(child)
 	if child:IsA('Player') then
-		child.CharacterAdded:connect(function(character)
+		child.CharacterAdded:Connect(function(character)
 			OnCharacterAdded(child, character)
 		end)
 		if child.Character then
@@ -109,7 +109,7 @@ function PopperCam:Update()
 		end
 
 		if popAmount > 0 then
-			Camera.CFrame = cameraCFrame + (cameraCFrame.lookVector * popAmount)
+			Camera.CFrame = cameraCFrame + (cameraCFrame.LookVector * popAmount)
 			LastPopAmount = popAmount - POP_RESTORE_RATE -- Shrink it for the next frame
 			if LastPopAmount < 0 then
 				LastPopAmount = 0
@@ -126,8 +126,8 @@ end
 
 
 -- Connect to all Players so we can ignore their Characters
-Players.ChildRemoved:connect(OnPlayersChildRemoved)
-Players.ChildAdded:connect(OnPlayersChildAdded)
+Players.ChildRemoved:Connect(OnPlayersChildRemoved)
+Players.ChildAdded:Connect(OnPlayersChildAdded)
 for _, player in pairs(Players:GetPlayers()) do
 	OnPlayersChildAdded(player)
 end

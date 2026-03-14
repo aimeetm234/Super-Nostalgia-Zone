@@ -1,10 +1,10 @@
 local Ball = script.Parent
 local damage = 35
 
-local r = game:service("RunService")
+local r = game:GetService("RunService")
 local debris = game:GetService("Debris")
 
-local last_sound_time = r.Stepped:wait()
+local last_sound_time = r.Stepped:Wait()
 
 local allowTeamDamage = false
 local ServerStorage = game:GetService("ServerStorage")
@@ -33,15 +33,15 @@ function onTouched(hit)
 		
 		if canDamage then
 			if connection then 
-				connection:disconnect() 
+				connection:Disconnect() 
 			end
-			Ball.Boing:play()
+			Ball.Boing:Play()
 			tagHumanoid(humanoid)
 			humanoid:TakeDamage(damage)
 			if humanoid.RootPart then
-				local apply = (Ball.Position - humanoid.RootPart.Position).unit * (Ball.Velocity/4)
-				humanoid.RootPart.Velocity = humanoid.RootPart.Velocity + apply
-				humanoid.RootPart.RotVelocity = humanoid.RootPart.RotVelocity + apply
+				local apply = (Ball.Position - humanoid.RootPart.Position).Unit * (Ball.AssemblyLinearVelocity/4)
+				humanoid.RootPart.AssemblyLinearVelocity = humanoid.RootPart.AssemblyLinearVelocity + apply
+				humanoid.RootPart.AssemblyAngularVelocity = humanoid.RootPart.AssemblyAngularVelocity + apply
 			end
 			humanoid.PlatformStand = true
 			wait(.1)
@@ -50,12 +50,12 @@ function onTouched(hit)
 	else
 		local now = tick()
 		if (now - last_sound_time > .1) then
-			Ball.Boing:play()
+			Ball.Boing:Play()
 			last_sound_time = now
 			damage = damage / 2
 			if damage < 2 then
 				if connection then 
-					connection:disconnect() 
+					connection:Disconnect() 
 				end
 			end
 		end
@@ -63,16 +63,16 @@ function onTouched(hit)
 end
 
 function tagHumanoid(humanoid)	
-	local tag = Ball:findFirstChild("creator")
+	local tag = Ball:FindFirstChild("creator")
 	if tag ~= nil then
-		local new_tag = tag:clone()
+		local new_tag = tag:Clone()
 		new_tag.Parent = humanoid
 		debris:AddItem(new_tag, 4)
 	end
 end
 
 
-connection = Ball.Touched:connect(onTouched)
+connection = Ball.Touched:Connect(onTouched)
 
 wait(5)
 

@@ -15,5 +15,5 @@ end
 
 while true do
 	wait(.1)
-	bv.Velocity = engine.CFrame.lookVector * speed
+	bv.Velocity = engine.CFrame.LookVector * speed
 end 

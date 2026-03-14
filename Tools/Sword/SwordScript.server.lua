@@ -1,6 +1,6 @@
 -------- OMG HAX
 
-r = game:service("RunService")
+r = game:GetService("RunService")
 
 
 local damage = 5
@@ -40,10 +40,10 @@ function tagHumanoid(humanoid, player)
 end
 
 function spawnSound(sound)
-	local s = sound:clone()
+	local s = sound:Clone()
 	s.Parent = sound.Parent
 	s:Play()
-	s.Ended:connect(function ()
+	s.Ended:Connect(function ()
 		s:Destroy()
 	end)
 end
@@ -51,10 +51,10 @@ end
 function blow(hit)
 	if (hit.Parent == nil) then return end -- happens when bullet hits sword
 
-	local humanoid = hit.Parent:findFirstChild("Humanoid")
+	local humanoid = hit.Parent:FindFirstChild("Humanoid")
 	local vCharacter = Tool.Parent
-	local vPlayer = game.Players:playerFromCharacter(vCharacter)
-	local hum = vCharacter:findFirstChild("Humanoid") -- non-nil if tool held by a character
+	local vPlayer = game.Players:GetPlayerFromCharacter(vCharacter)
+	local hum = vCharacter:FindFirstChild("Humanoid") -- non-nil if tool held by a character
 	if humanoid~=nil and humanoid ~= hum and hum ~= nil then
 		-- final check, make sure sword is in-hand
 
@@ -170,12 +170,12 @@ end
 
 
 function onEquipped()
-	UnsheathSound:play()
+	UnsheathSound:Play()
 end
 
 
-script.Parent.Activated:connect(onActivated)
-script.Parent.Equipped:connect(onEquipped)
+script.Parent.Activated:Connect(onActivated)
+script.Parent.Equipped:Connect(onEquipped)
 
 
-connection = sword.Touched:connect(blow)
+connection = sword.Touched:Connect(blow)

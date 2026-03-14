@@ -44,7 +44,7 @@ local function update(dt)
 		return
 	end
 	
-	local yVel = rootPart.Velocity.Y
+	local yVel = rootPart.AssemblyLinearVelocity.Y
 	
 	if math.abs(yVel) > 8 then
 		local goal = math.sign(yVel)

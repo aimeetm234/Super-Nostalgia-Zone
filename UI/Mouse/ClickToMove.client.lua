@@ -79,7 +79,7 @@ local function rotateCameraTowardsGoal(dt)
 		local cf = camera.CFrame
 		local focus = camera.Focus
 						
-		local desiredAngle = CFrame.new(cf.Position, currentGoal).lookVector
+		local desiredAngle = CFrame.new(cf.Position, currentGoal).LookVector
 		local currentAngle = cf.LookVector
 		
 		local angleBetween = findAngleBetweenXZVectors(desiredAngle, currentAngle)

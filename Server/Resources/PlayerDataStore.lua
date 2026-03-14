@@ -189,7 +189,7 @@ end
 -- the first yield before returning
 local function SpawnNow(func)
 	local ev = Instance.new('BindableEvent')
-	ev.Event:connect(func)
+	ev.Event:Connect(func)
 	ev:Fire()
 end
 	
@@ -251,7 +251,7 @@ function SaveData.new(playerDataStore, userId)
 	
 	function this:waitForUnlocked()
 		while this.locked do
-			this.unlocked.Event:wait()
+			this.unlocked.Event:Wait()
 		end
 	end
 	function this:lock()
@@ -629,7 +629,7 @@ function PlayerDataStore.new()
 			if DEBUG then print("\tRecord already requested, wait for it...") end
 			-- wait for the existing request to complete
 			while true do
-				saveData = mRequestCompleted.Event:wait()()
+				saveData = mRequestCompleted.Event:Wait()()
 				if saveData.userId == userId then
 					-- this IS the request we're looking for
 					this:markAsTouched(saveData)
@@ -671,21 +671,21 @@ function PlayerDataStore.new()
 	-- Handle adding and removing strong-references to a player's
 	-- data while they are in the server.
 	local function HandlePlayer(player)
-		if DEBUG then print("PlayerDataStore> Player "..player.userId.." Entered > Load Data") end
-		local saveData = doLoad(player.userId)
+		if DEBUG then print("PlayerDataStore> Player "..player.UserId.." Entered > Load Data") end
+		local saveData = doLoad(player.UserId)
 		-- are the still in the game? If they are then
 		-- add the strong-reference to the SaveData
 		if player.Parent then
 			mOnlinePlayerSaveDataMap[player] = saveData
 		end 
 	end
-	Game.Players.PlayerAdded:connect(HandlePlayer)
-	for _, player in pairs(Game.Players:GetChildren()) do
+	game.Players.PlayerAdded:Connect(HandlePlayer)
+	for _, player in pairs(game.Players:GetChildren()) do
 		if player:IsA('Player') then
 			HandlePlayer(player)
 		end
 	end
-	Game.Players.PlayerRemoving:connect(function(player)
+	game.Players.PlayerRemoving:Connect(function(player)
 		-- remove the strong-reference when they leave.
 		local oldSaveData = mOnlinePlayerSaveDataMap[player]
 		mOnlinePlayerSaveDataMap[player] = nil
@@ -698,7 +698,7 @@ function PlayerDataStore.new()
 			-- here as if there were a cache version the oldSaveData
 			-- would exist, as the doLoad on player entered would
 			-- have completed immediately.
-			if DEBUG then print("PlayerDataStore> Player "..player.userId.." Left with data to save > Save Data") end
+			if DEBUG then print("PlayerDataStore> Player "..player.UserId.." Left with data to save > Save Data") end
 			this:doSave(oldSaveData)
 		end
 	end)
@@ -760,7 +760,7 @@ function PlayerDataStore.new()
 	end
 	
 	-- Main save / cache handling daemon
-	Spawn(function()
+	spawn(function()
 		while true do
 			removeTimedOutCacheEntries()
 			passiveSaveUnsavedChanges()
@@ -777,7 +777,7 @@ function PlayerDataStore.new()
 		if not player or not player:IsA('Player') then
 			error("Bad argument #1 to PlayerDataStore::GetSaveData(), Player expected", 2)
 		end
-		return doLoad(player.userId)
+		return doLoad(player.UserId)
 	end
 	
 	-- Get the data for a player by userId, they may
@@ -816,7 +816,7 @@ function PlayerDataStore.new()
 		
 		-- wait for completion
 		if savesRunning > 0 then
-			complete.Event:wait()
+			complete.Event:Wait()
 			this.FlushingAll = false
 		end
 	end

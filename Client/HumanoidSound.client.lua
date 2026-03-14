@@ -8,7 +8,7 @@ local soundMounted = CollectionService:GetInstanceAddedSignal(soundTag)
 ----------------------------------------------------------------------------------------------------
 
 local function deleteSound(sound)
-	sound.EmitterSize = 0
+	sound.RollOffMinDistance = 0
 	Debris:AddItem(sound, 0.1)
 end
 
@@ -16,7 +16,7 @@ local function setSoundId(soundId, andThen, useRbxAssetId)
 	local prefix = useRbxAssetId and "rbxassetid://" or "rbxasset://sounds/"
 	return function (sound, humanoid)
 		sound.SoundId = prefix .. soundId
-		sound.Pitch = 1
+		sound.PlaybackSpeed = 1
 		
 		if andThen then
 			andThen(sound, humanoid)

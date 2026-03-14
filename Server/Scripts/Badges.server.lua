@@ -67,8 +67,8 @@ local lastWipeout = {}
 
 local function giveBadge(player,badge)
 	warn("AWARDING BADGE", badge, "TO", player)
-	if not BadgeService:UserHasBadge(player.UserId,badge) then
-		BadgeService:AwardBadge(player.UserId,badge)
+	if not BadgeService:UserHasBadgeAsync(player.UserId,badge) then
+		BadgeService:AwardBadgeAsync(player.UserId,badge)
 	end
 end
 

@@ -6,7 +6,7 @@ local head = char:WaitForChild("Head")
 
 local function onStateChanged(old,new)
 	if new.Name == "Landed" then
-		local velocity = humanoid.Torso.Velocity
+		local velocity = humanoid.Torso.AssemblyLinearVelocity
 		local power = (-velocity.Y * workspace.Gravity) / 2
 		
 		local force = Instance.new("BodyForce")
@@ -18,4 +18,4 @@ local function onStateChanged(old,new)
 	end
 end
 
-humanoid.StateChanged:connect(onStateChanged)
+humanoid.StateChanged:Connect(onStateChanged)

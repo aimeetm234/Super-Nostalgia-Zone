@@ -88,7 +88,7 @@ local function gamepadLinearToCurve(thumbstickPosition)
 		point = point * sign
 		return clamp(-1, 1, point)
 	end
-	return Vector2_new(onAxis(thumbstickPosition.x), onAxis(thumbstickPosition.y))
+	return Vector2_new(onAxis(thumbstickPosition.X), onAxis(thumbstickPosition.Y))
 end
 
 -- Reset the camera look vector when the camera is enabled for the first time
@@ -148,7 +148,7 @@ function this:GetSubjectPosition()
 end
 
 function this:GetCameraLook()
-	return workspace.CurrentCamera and workspace.CurrentCamera.CFrame.lookVector or Vector3.new(0,0,1)
+	return workspace.CurrentCamera and workspace.CurrentCamera.CFrame.LookVector or Vector3.new(0,0,1)
 end
 
 function this:GetCameraZoom()
@@ -187,27 +187,27 @@ end
 function this:ScreenTranslationToAngle(translationVector)
 	local screenX = this:ViewSizeX()
 	local screenY = this:ViewSizeY()
-	local xTheta = (translationVector.x / screenX)
-	local yTheta = (translationVector.y / screenY)
+	local xTheta = (translationVector.X / screenX)
+	local yTheta = (translationVector.Y / screenY)
 	return Vector2_new(xTheta, yTheta)
 end
 
 function this:MouseTranslationToAngle(translationVector)
-	local xTheta = (translationVector.x / 1920)
-	local yTheta = (translationVector.y / 1200)
+	local xTheta = (translationVector.X / 1920)
+	local yTheta = (translationVector.Y / 1200)
 	return Vector2_new(xTheta, yTheta)
 end
 
 function this:RotateVector(startVector, xyRotateVector)
 	local startCFrame = CFrame_new(ZERO_VECTOR3, startVector)
-	local resultLookVector = (CFrame_Angles(0, -xyRotateVector.x, 0) * startCFrame * CFrame_Angles(-xyRotateVector.y,0,0)).lookVector
-	return resultLookVector, Vector2_new(xyRotateVector.x, xyRotateVector.y)
+	local resultLookVector = (CFrame_Angles(0, -xyRotateVector.X, 0) * startCFrame * CFrame_Angles(-xyRotateVector.Y,0,0)).LookVector
+	return resultLookVector, Vector2_new(xyRotateVector.X, xyRotateVector.Y)
 end
 
 function this:RotateCamera(startLook, xyRotateVector)
-	local startVertical = math_asin(startLook.y)
-	local yTheta = clamp(-MAX_Y + startVertical, -MIN_Y + startVertical, xyRotateVector.y)
-	return self:RotateVector(startLook, Vector2_new(xyRotateVector.x, yTheta))
+	local startVertical = math_asin(startLook.Y)
+	local yTheta = clamp(-MAX_Y + startVertical, -MIN_Y + startVertical, xyRotateVector.Y)
+	return self:RotateVector(startLook, Vector2_new(xyRotateVector.X, yTheta))
 end
 
 function this:IsInFirstPerson()
@@ -402,7 +402,7 @@ do
 				end
 			end
 			if #unsunkTouches == 2 then
-				local difference = (unsunkTouches[1].Position - unsunkTouches[2].Position).magnitude
+				local difference = (unsunkTouches[1].Position - unsunkTouches[2].Position).Magnitude
 				if StartingDiff and pinchBeginZoom then
 					local scale = difference / math_max(0.01, StartingDiff)
 					local clampedScale = clamp(0.1, 10, scale)
@@ -423,9 +423,9 @@ do
 	
 	local function calcLookBehindRotateInput(torso)
 		if torso then
-			local newDesiredLook = (torso.CFrame.lookVector - Vector3.new(0,0.23,0)).unit
+			local newDesiredLook = (torso.CFrame.LookVector - Vector3.new(0,0.23,0)).Unit
 			local horizontalShift = findAngleBetweenXZVectors(newDesiredLook, this:GetCameraLook())
-			local vertShift = math_asin(this:GetCameraLook().y) - math_asin(newDesiredLook.y)
+			local vertShift = math_asin(this:GetCameraLook().Y) - math_asin(newDesiredLook.Y)
 			if not IsFinite(horizontalShift) then
 				horizontalShift = 0
 			end
@@ -537,9 +537,9 @@ do
 	
 	local function rotateVectorByAngleAndRound(camLook, rotateAngle, roundAmount)
 		if camLook ~= ZERO_VECTOR3 then
-			camLook = camLook.unit
-			local currAngle = math_atan2(camLook.z, camLook.x)
-			local newAngle = round((math_atan2(camLook.z, camLook.x) + rotateAngle) / roundAmount) * roundAmount
+			camLook = camLook.Unit
+			local currAngle = math_atan2(camLook.Z, camLook.X)
+			local newAngle = round((math_atan2(camLook.Z, camLook.X) + rotateAngle) / roundAmount) * roundAmount
 			return newAngle - currAngle
 		end
 		return 0
@@ -627,7 +627,7 @@ do
 	
 				if lastVelocity then
 					local velocity = (gamepadPan - lastThumbstickPos)/(currentTime - lastThumbstickRotate)
-					local velocityDeltaMag = (velocity - lastVelocity).magnitude
+					local velocityDeltaMag = (velocity - lastVelocity).Magnitude
 	
 					if velocityDeltaMag > 12 then
 						currentSpeed = currentSpeed * (20/velocityDeltaMag)
@@ -720,7 +720,7 @@ do
 			end		
 			
 			local inputVector = Vector2.new(input.Position.X, -input.Position.Y)
-			if inputVector.magnitude > THUMBSTICK_DEADZONE then
+			if inputVector.Magnitude > THUMBSTICK_DEADZONE then
 				this.GamepadPanningCamera = Vector2_new(input.Position.X, -input.Position.Y)
 			else
 				this.GamepadPanningCamera = ZERO_VECTOR2
@@ -880,9 +880,9 @@ do
 			end
 	
 			if humanoid and humanoid.Torso and player.Character == newCharacter then
-				local newDesiredLook = (humanoid.Torso.CFrame.lookVector - Vector3.new(0,0.23,0)).unit
+				local newDesiredLook = (humanoid.Torso.CFrame.LookVector - Vector3.new(0,0.23,0)).Unit
 				local horizontalShift = findAngleBetweenXZVectors(newDesiredLook, this:GetCameraLook())
-				local vertShift = math_asin(this:GetCameraLook().y) - math_asin(newDesiredLook.y)
+				local vertShift = math_asin(this:GetCameraLook().Y) - math_asin(newDesiredLook.Y)
 				if not IsFinite(horizontalShift) then
 					horizontalShift = 0
 				end

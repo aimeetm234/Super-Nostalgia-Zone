@@ -20,20 +20,21 @@ local function fire(v)
 	local spawnPos = vCharacter.PrimaryPart.Position
 	spawnPos = spawnPos + (v * 8)
 
+	local density = missile.CurrentPhysicalProperties.Density
+
 	missile.Position = spawnPos
 	missile.Size = Vector3.new(1, 1, 1)
-	missile.Velocity = v * 100
+	missile.AssemblyLinearVelocity = v * 100
 	missile.BrickColor = BrickColor.new(colors[math.random(1, #colors)])
 	missile.Shape = 0
 	missile.BottomSurface = 0
 	missile.TopSurface = 0
 	missile.Name = "Paintball"
-	missile.Elasticity = 0
+	missile.CustomPhysicalProperties = PhysicalProperties.new(density, .9, 0)
 	missile.Reflectance = 0
-	missile.Friction = .9
 
 	local force = Instance.new("BodyForce")
-	force.force = Vector3.new(0,45,0)
+	force.Force = Vector3.new(0,45,0)
 	force.Parent = missile
 	
 	local new_script = Tool.Paintball:Clone()
@@ -70,7 +71,7 @@ function onActivated()
 	end
 
 	local targetPos = humanoid.TargetPoint
-	local lookAt = (targetPos - character.Head.Position).unit
+	local lookAt = (targetPos - character.Head.Position).Unit
 
 	fire(lookAt)
 	wait(.5)
@@ -78,4 +79,4 @@ function onActivated()
 	Tool.Enabled = true
 end
 
-Tool.Activated:connect(onActivated)
+Tool.Activated:Connect(onActivated)

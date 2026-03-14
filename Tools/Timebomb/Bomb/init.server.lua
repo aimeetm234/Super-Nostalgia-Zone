@@ -18,24 +18,24 @@ local function update()
 end
 
 local function spawnSound(sound)
-	local s = sound:clone()
+	local s = sound:Clone()
 	s.Parent = sound.Parent
 	s:Play()
-	s.Ended:connect(function ()
+	s.Ended:Connect(function ()
 		s:Destroy()
 	end)
 end
 
 function tagHumanoid(humanoid)
 	-- todo: make tag expire
-	local tag = bomb:findFirstChild("creator")
+	local tag = bomb:FindFirstChild("creator")
 	if tag ~= nil then
 		-- kill all other tags
-		while(humanoid:findFirstChild("creator") ~= nil) do
-			humanoid:findFirstChild("creator").Parent = nil
+		while(humanoid:FindFirstChild("creator") ~= nil) do
+			humanoid:FindFirstChild("creator").Parent = nil
 		end
 
-		local new_tag = tag:clone()
+		local new_tag = tag:Clone()
 		new_tag.Parent = humanoid
 		debris:AddItem(new_tag, 1)
 	end
@@ -79,5 +79,5 @@ explosion.Parent = workspace
 bomb.Transparency = 1
 bomb.Anchored = true
 bomb.CanCollide = false
-sound.Ended:wait()
+sound.Ended:Wait()
 bomb:Destroy()

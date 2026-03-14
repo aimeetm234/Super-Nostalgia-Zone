@@ -9,7 +9,7 @@ local function onStateChanged(old,new)
 		
 		while wait(0.5) do
 			if humanoid.RootPart then
-				local velocity = humanoid.RootPart.Velocity
+				local velocity = humanoid.RootPart.AssemblyLinearVelocity
 				
 				if velocity.Magnitude < 0.1 then
 					wait(2)

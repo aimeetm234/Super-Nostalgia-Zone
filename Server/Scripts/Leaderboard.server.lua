@@ -16,9 +16,9 @@ stands = {}
 CTF_mode = false
 
 function onHumanoidDied(humanoid, player)
-	local stats = player:findFirstChild("leaderstats")
+	local stats = player:FindFirstChild("leaderstats")
 	if stats ~= nil then
-		local deaths = stats:findFirstChild("Wipeouts")
+		local deaths = stats:FindFirstChild("Wipeouts")
 		deaths.Value = deaths.Value + 1
 
 		-- do short dance to try and find the killer
@@ -37,7 +37,7 @@ function onPlayerRespawn(property, player)
 		local deathCon
 			local p = player
 			local h = humanoid
-			deathCon = humanoid.Died:connect(function ()
+			deathCon = humanoid.Died:Connect(function ()
 				deathCon:Disconnect()
 				onHumanoidDied(h, p) 
 			end)
@@ -49,7 +49,7 @@ function getKillerOfHumanoidIfStillInGame(humanoid)
 	-- returns nil if the killer is no longer in the game
 
 	-- check for kill tag on humanoid - may be more than one - todo: deal with this
-	local tag = humanoid:findFirstChild("creator")
+	local tag = humanoid:FindFirstChild("creator")
 
 	-- find player with name on tag
 	if tag ~= nil then
@@ -66,9 +66,9 @@ end
 function handleKillCount(humanoid, player)
 	local killer = getKillerOfHumanoidIfStillInGame(humanoid)
 	if killer ~= nil then
-		local stats = killer:findFirstChild("leaderstats")
+		local stats = killer:FindFirstChild("leaderstats")
 		if stats ~= nil then
-			local kills = stats:findFirstChild("KOs")
+			local kills = stats:FindFirstChild("KOs")
 			if killer ~= player then
 				kills.Value = kills.Value + 1
 				
@@ -88,10 +88,10 @@ end
 function findAllFlagStands(root)
 	local c = root:children()
 	for i=1,#c do
-		if (c[i].className == "Model" or c[i].className == "Part") then
+		if (c[i].ClassName == "Model" or c[i].ClassName == "Part") then
 			findAllFlagStands(c[i])
 		end
-		if (c[i].className == "FlagStand") then
+		if (c[i].ClassName == "FlagStand") then
 			table.insert(stands, c[i])
 		end
 	end
@@ -99,7 +99,7 @@ end
 
 function hookUpListeners()
 	for i=1,#stands do
-		stands[i].FlagCaptured:connect(onCaptureScored)
+		stands[i].FlagCaptured:Connect(onCaptureScored)
 	end
 end
 
@@ -154,13 +154,13 @@ function onPlayerEntered(newPlayer)
 		local deathCon
 		local humanoid = newPlayer.Character.Humanoid
 		
-		deathCon = humanoid.Died:connect(function() 
+		deathCon = humanoid.Died:Connect(function() 
 			deathCon:Disconnect()
 			onHumanoidDied(humanoid, newPlayer) 
 		end )
 
 		-- start to listen for new humanoid
-		newPlayer.Changed:connect(function(property) onPlayerRespawn(property, newPlayer) end )
+		newPlayer.Changed:Connect(function(property) onPlayerRespawn(property, newPlayer) end )
 
 
 		stats.Parent = newPlayer
@@ -172,9 +172,9 @@ end
 
 function onCaptureScored(player)
 
-		local ls = player:findFirstChild("leaderstats")
+		local ls = player:FindFirstChild("leaderstats")
 		if ls == nil then return end
-		local caps = ls:findFirstChild("Captures")
+		local caps = ls:FindFirstChild("Captures")
 		if caps == nil then return end
 		caps.Value = caps.Value + 1
 
@@ -189,6 +189,6 @@ for _,v in pairs(game.Players:GetPlayers()) do
 	onPlayerEntered(v)
 end
 
-game.Players.ChildAdded:connect(onPlayerEntered)
+game.Players.ChildAdded:Connect(onPlayerEntered)
 
 

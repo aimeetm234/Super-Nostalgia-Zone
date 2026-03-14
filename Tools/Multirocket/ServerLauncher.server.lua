@@ -12,16 +12,16 @@ Rocket.TopSurface = 3
 Rocket.Size = Vector3.new(1,1,4)
 Rocket.BrickColor = BrickColor.Red()
 
-Tool.RocketScript:clone().Parent = Rocket
-Sounds.Explosion:clone().Parent = Rocket
-Sounds.Swoosh:clone().Parent = Rocket
+Tool.RocketScript:Clone().Parent = Rocket
+Sounds.Explosion:Clone().Parent = Rocket
+Sounds.Swoosh:Clone().Parent = Rocket
 
 
 function fire(vTarget)
 
 	local vCharacter = Tool.Parent;
 	
-	local vHandle = vCharacter:findFirstChild("Head")
+	local vHandle = vCharacter:FindFirstChild("Head")
 	if vHandle == nil then
 		print("Handle not found")
 		return 
@@ -31,7 +31,7 @@ function fire(vTarget)
 
 	dir = computeDirection(dir)
 
-	local missile = Rocket:clone()
+	local missile = Rocket:Clone()
 
 	local pos = vHandle.Position + (dir * 6)
 	
@@ -40,7 +40,7 @@ function fire(vTarget)
 
 	local creator_tag = Instance.new("ObjectValue")
 
-	local vPlayer = game.Players:playerFromCharacter(vCharacter)
+	local vPlayer = game.Players:GetPlayerFromCharacter(vCharacter)
 
 	if vPlayer == nil then
 		print("Player not found")
@@ -60,9 +60,9 @@ function fire(vTarget)
 end
 
 function computeDirection(vec)
-	local lenSquared = vec.magnitude * vec.magnitude
+	local lenSquared = vec.Magnitude * vec.Magnitude
 	local invSqrt = 1 / math.sqrt(lenSquared)
-	return Vector3.new(vec.x * invSqrt, vec.y * invSqrt, vec.z * invSqrt)
+	return Vector3.new(vec.X * invSqrt, vec.Y * invSqrt, vec.Z * invSqrt)
 end
 
 Tool.Enabled = true
@@ -90,5 +90,5 @@ function onActivated()
 end
 
 
-script.Parent.Activated:connect(onActivated)
+script.Parent.Activated:Connect(onActivated)
 

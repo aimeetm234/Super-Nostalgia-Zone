@@ -22,7 +22,7 @@ local function setupHumanoid(h)
 	
 	local function onAncestryChanged()
 		if updateCon then
-			updateCon:disconnect()
+			updateCon:Disconnect()
 			updateCon = nil
 		end
 		
@@ -61,7 +61,7 @@ local function setupHumanoid(h)
 				local c = workspace.CurrentCamera
 				
 				local function update()
-					local dist = (c.CFrame.p - head.Position).magnitude
+					local dist = (c.CFrame.p - head.Position).Magnitude
 					local fontSize = 12
 					
 					if dist < 20 then

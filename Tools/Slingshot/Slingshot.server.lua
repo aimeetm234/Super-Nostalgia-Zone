@@ -9,13 +9,13 @@ Pellet.Shape = 0
 Pellet.Size = Vector3.new(1,1,1)
 Pellet.BrickColor = BrickColor.new(2)
 
-Tool.PelletScript:clone().Parent = Pellet
+Tool.PelletScript:Clone().Parent = Pellet
 
 function spawnSound(sound)
-	local s = sound:clone()
+	local s = sound:Clone()
 	s.Parent = sound.Parent
 	s:Play()
-	s.Ended:connect(function ()
+	s.Ended:Connect(function ()
 		s:Destroy()
 	end)
 end
@@ -27,9 +27,9 @@ function fire(mouse_pos)
 -- find player's head pos
 
 	local vCharacter = Tool.Parent
-	local vPlayer = game.Players:playerFromCharacter(vCharacter)
+	local vPlayer = game.Players:GetPlayerFromCharacter(vCharacter)
 
-	local head = vCharacter:findFirstChild("Head")
+	local head = vCharacter:FindFirstChild("Head")
 	if head == nil then return end
 
 	local dir = mouse_pos - head.Position
@@ -39,13 +39,13 @@ function fire(mouse_pos)
 
 	local delta = mouse_pos - launch
 	
-	local dy = delta.y
+	local dy = delta.Y
 	
-	local new_delta = Vector3.new(delta.x, 0, delta.z)
+	local new_delta = Vector3.new(delta.X, 0, delta.Z)
 	delta = new_delta
 
-	local dx = delta.magnitude
-	local unit_delta = delta.unit
+	local dx = delta.Magnitude
+	local unit_delta = delta.Unit
 	
 	-- acceleration due to gravity in RBX units
 	local g = (-9.81 * 20)
@@ -54,17 +54,17 @@ function fire(mouse_pos)
 
 	local vy = math.sin(theta)
 	local xz = math.cos(theta)
-	local vx = unit_delta.x * xz
-	local vz = unit_delta.z * xz
+	local vx = unit_delta.X * xz
+	local vz = unit_delta.Z * xz
 	
 
-	local missile = Pellet:clone()
+	local missile = Pellet:Clone()
         
 
 		
 
 	missile.Position = launch
-	missile.Velocity = Vector3.new(vx,vy,vz) * VELOCITY
+	missile.AssemblyLinearVelocity = Vector3.new(vx,vy,vz) * VELOCITY
 
 	missile.PelletScript.Disabled = false
 
@@ -98,9 +98,9 @@ function computeLaunchAngle(dx,dy,grav)
 end
 
 function computeDirection(vec)
-	local lenSquared = vec.magnitude * vec.magnitude
+	local lenSquared = vec.Magnitude * vec.Magnitude
 	local invSqrt = 1 / math.sqrt(lenSquared)
-	return Vector3.new(vec.x * invSqrt, vec.y * invSqrt, vec.z * invSqrt)
+	return Vector3.new(vec.X * invSqrt, vec.Y * invSqrt, vec.Z * invSqrt)
 end
 
 
@@ -135,4 +135,4 @@ function onActivated()
 	Tool.Enabled = true
 end
 
-script.Parent.Activated:connect(onActivated)
+script.Parent.Activated:Connect(onActivated)

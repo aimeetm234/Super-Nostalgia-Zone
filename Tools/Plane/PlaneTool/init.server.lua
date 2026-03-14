@@ -29,7 +29,7 @@ local function fireRocket(pln,spn)
 end
 
 local function fireDeathLaser(engine)
-	local dir = engine.CFrame.lookVector
+	local dir = engine.CFrame.LookVector
 	for i = 1, 50 do
 		local ex = Instance.new("Explosion")
 		ex.BlastRadius = 6
@@ -43,25 +43,25 @@ local function fireDeathLaser(engine)
 end
 
 local function computeDirection(vec)
-	local lenSquared = vec.magnitude * vec.magnitude
+	local lenSquared = vec.Magnitude * vec.Magnitude
 	local invSqrt = 1 / math.sqrt(lenSquared)
-	return Vector3.new(vec.x * invSqrt, vec.y * invSqrt, vec.z * invSqrt)
+	return Vector3.new(vec.X * invSqrt, vec.Y * invSqrt, vec.Z * invSqrt)
 end
 
 local function move(target, engine)
-	local bg = engine:findFirstChild("BodyGyro")
+	local bg = engine:FindFirstChild("BodyGyro")
 	if bg then
-		local origincframe = bg.cframe
-		local dir = (target - engine.Position).unit
+		local origincframe = bg.CFrame
+		local dir = (target - engine.Position).Unit
 		local spawnPos = engine.Position
 	
 		local pos = spawnPos + (dir * 1)
 	
-		bg.maxTorque = Vector3.new(900000, 900000, 900000)
-		bg.cframe = CFrame.new(pos,  pos + dir)
+		bg.MaxTorque = Vector3.new(900000, 900000, 900000)
+		bg.CFrame = CFrame.new(pos,  pos + dir)
 		wait(0.1)
-		bg.maxTorque = Vector3.new(0, 0, 0)
-		bg.cframe = origincframe
+		bg.MaxTorque = Vector3.new(0, 0, 0)
+		bg.CFrame = origincframe
 	end
 end
 
@@ -172,7 +172,7 @@ local function onKeyDown(key)
 				planedebounce = true
 				for i = 1,4 do
 					wait()
-					engine.RotVelocity = engine.RotVelocity + Vector3.new(0, -0.7, 0)
+					engine.AssemblyAngularVelocity = engine.AssemblyAngularVelocity + Vector3.new(0, -0.7, 0)
 				end
 				planedebounce = false
 			end
@@ -180,12 +180,12 @@ local function onKeyDown(key)
 				planedebounce = true
 				for i = 1,4 do
 					wait()
-					engine.RotVelocity = engine.RotVelocity + Vector3.new(0, 0.7, 0)
+					engine.AssemblyAngularVelocity = engine.AssemblyAngularVelocity + Vector3.new(0, 0.7, 0)
 				end
 			end
 			if (key=="j") and not planedebounce then
 				local body = plane.Engine.BodyGyro
-				body.maxTorque = Vector3.new(9000, 9000, 9000)
+				body.MaxTorque = Vector3.new(9000, 9000, 9000)
 
 				local position = engine.CFrame * Vector3.new(0, 0.5, -4)
 				local dir = position - engine.Position
@@ -196,23 +196,23 @@ local function onKeyDown(key)
 
 				local pos = spawnPos + (dir * 8)
 
-				body.cframe = CFrame.new(pos,  pos + dir)
+				body.CFrame = CFrame.new(pos,  pos + dir)
 				wait(.2)
-				body.maxTorque = Vector3.new(0, 0, 0)
+				body.MaxTorque = Vector3.new(0, 0, 0)
 			end
 			if (key=="l") and planedebounce == false then
 				local body = plane.Engine.BodyGyro
-				body.maxTorque = Vector3.new(9000, 0, 0)
+				body.MaxTorque = Vector3.new(9000, 0, 0)
 				local frame = plane:FindFirstChild("OriginCFrame")
 				if frame ~= nil then
-					body.cframe = frame.Value
+					body.CFrame = frame.Value
 				end
 				wait(0.1)
-				body.maxTorque = Vector3.new(0, 0, 0)
+				body.MaxTorque = Vector3.new(0, 0, 0)
 			end
 			if (key=="u") and planedebounce == false then
 				local body = plane.Engine.BodyGyro
-				body.maxTorque = Vector3.new(9000, 9000, 9000)
+				body.MaxTorque = Vector3.new(9000, 9000, 9000)
 
 				local position = engine.CFrame * Vector3.new(0, -0.5, -4)
 				local dir = position - engine.Position
@@ -223,28 +223,28 @@ local function onKeyDown(key)
 
 				local pos = spawnPos + (dir * 8)
 
-				body.cframe = CFrame.new(pos,  pos + dir)
+				body.CFrame = CFrame.new(pos,  pos + dir)
 				wait(.2)
-				body.maxTorque = Vector3.new(0, 0, 0)
+				body.MaxTorque = Vector3.new(0, 0, 0)
 			end
 			if (key=="g") and planedebounce == false and stuntdebounce == false then
 				planedebounce = true
 				stuntdebounce = true
 				plane.Parent.Stunt.Value = 1
 				local body = plane.Engine.BodyGyro
-				body.maxTorque = Vector3.new(9000, 9000, 9000)
+				body.MaxTorque = Vector3.new(9000, 9000, 9000)
 
 				local currentframe = plane.Engine.CFrame
 
 				for i = 1,6 do
-				body.cframe = plane.Engine.CFrame * CFrame.fromEulerAnglesXYZ(0, 0, 30)
+				body.CFrame = plane.Engine.CFrame * CFrame.fromEulerAnglesXYZ(0, 0, 30)
 				wait(.2)
 				end
 
-				body.cframe = currentframe
+				body.CFrame = currentframe
 				wait(.6)
 
-				body.maxTorque = Vector3.new(0, 0, 0)
+				body.MaxTorque = Vector3.new(0, 0, 0)
 				planedebounce = false
 				plane.Parent.Stunt.Value = 0
 				wait(3)
@@ -255,24 +255,24 @@ local function onKeyDown(key)
 				stuntdebounce = true
 				plane.Parent.Stunt.Value = 1
 				local body = plane.Engine.BodyGyro
-				body.maxTorque = Vector3.new(9000, 9000, 9000)
+				body.MaxTorque = Vector3.new(9000, 9000, 9000)
 
 				local currentframe = plane.Engine.CFrame
 				local valy = 30
 				local valz = 30
 
 				for i = 1,8 do
-				body.cframe = currentframe * CFrame.fromEulerAnglesXYZ(0, valy, valz)
+				body.CFrame = currentframe * CFrame.fromEulerAnglesXYZ(0, valy, valz)
 				valy = valy +50
 				valz = valz +100
 				wait(.1)
 				end
 
-				body.cframe = currentframe * CFrame.fromEulerAnglesXYZ(0, 600, 0)
+				body.CFrame = currentframe * CFrame.fromEulerAnglesXYZ(0, 600, 0)
 
 				wait(.5)
 
-				body.maxTorque = Vector3.new(0, 0, 0)
+				body.MaxTorque = Vector3.new(0, 0, 0)
 				planedebounce = false
 				plane.Parent.Stunt.Value = 0
 				wait(4)

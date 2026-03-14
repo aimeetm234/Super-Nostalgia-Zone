@@ -40,13 +40,13 @@ local function buildWall(cf)
 		while x < wallWidth / 2 do
 			local brick
 			brick, p = placeBrick(cf, Vector3.new(x, y, 0), color)
-			x = p.x
+			x = p.X
 			table.insert(bricks, brick)
 			brick:MakeJoints()
 			wait(brickSpeed)
 		end
 
-		y = p.y
+		y = p.Y
 	end
 
 	return bricks

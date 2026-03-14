@@ -24,7 +24,7 @@ local c = workspace.CurrentCamera
 local currentlyDown
 
 local function updateCameraStatus()
-	local dist = (c.Focus.p - c.CFrame.p).magnitude
+	local dist = (c.Focus.p - c.CFrame.p).Magnitude
 	firstPersonIndicator.Visible = (dist <= 1.5)
 	zoomLock.Visible = (dist <= 1)
 end
@@ -36,7 +36,7 @@ local function setupButton(btn)
 	local lock = btn:FindFirstChild("Lock")
 	local mouse = player:GetMouse()
 
-	btn.MouseEnter:connect(function ()
+	btn.MouseEnter:Connect(function ()
 		if (lock == nil or not lock.Visible) then
 			if (currentlyDown == nil or currentlyDown == btn) then
 				inBounds = true
@@ -49,7 +49,7 @@ local function setupButton(btn)
 		end
 	end)
 
-	btn.MouseLeave:connect(function ()
+	btn.MouseLeave:Connect(function ()
 		if (lock == nil or not lock.Visible) then
 			inBounds = false
 			if isDown then
@@ -60,7 +60,7 @@ local function setupButton(btn)
 		end
 	end)
 
-	btn.MouseButton1Down:connect(function ()
+	btn.MouseButton1Down:Connect(function ()
 		if (lock == nil or not lock.Visible) then
 			isDown = true
 			currentlyDown = btn
@@ -68,7 +68,7 @@ local function setupButton(btn)
 		end
 	end)
 
-	btn.MouseButton1Click:connect(function ()
+	btn.MouseButton1Click:Connect(function ()
 		if (lock == nil or not lock.Visible) then
 			isDown = false
 			currentlyDown = nil
@@ -120,4 +120,4 @@ for _,v in pairs(script.Parent:GetChildren()) do
 	end
 end
 
-c.Changed:connect(updateCameraStatus)
+c.Changed:Connect(updateCameraStatus)

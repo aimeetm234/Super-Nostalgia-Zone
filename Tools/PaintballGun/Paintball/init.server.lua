@@ -6,9 +6,9 @@ function onTouched(hit)
 		return
 	end
 	
-	local humanoid = hit.Parent:findFirstChild("Humanoid")
+	local humanoid = hit.Parent:FindFirstChild("Humanoid")
 		
-	if hit:GetMass() < 1.2 * 200 then
+	if hit.Mass < 1.2 * 200 then
 		hit.BrickColor = ball.BrickColor
 	end
 	
@@ -16,7 +16,7 @@ function onTouched(hit)
 	for i = 1, 3 do
 		local s = Instance.new("Part")
 		s.Shape = 1 -- block
-		s.formFactor = 2 -- plate
+		s.FormFactor = 2 -- plate
 		s.Size = Vector3.new(1,.4,1)
 		s.BrickColor = ball.BrickColor
 
@@ -25,7 +25,7 @@ function onTouched(hit)
 		cleanup.Parent = s
 
 		local v = Vector3.new(math.random(-1, 1), math.random(0, 1), math.random(-1, 1))
-		s.Velocity = 15 * v
+		s.AssemblyLinearVelocity = 15 * v
 		s.CFrame = CFrame.new(ball.Position + v, v)
 		
 		s.Parent = workspace
@@ -55,22 +55,22 @@ function onTouched(hit)
 		end
 	end
 
-	connection:disconnect()
+	connection:Disconnect()
 	ball.Parent = nil
 end
 
 function tagHumanoid(humanoid)
 	-- todo: make tag expire
-	local tag = ball:findFirstChild("creator")
+	local tag = ball:FindFirstChild("creator")
 	if tag ~= nil then
-		local new_tag = tag:clone()
+		local new_tag = tag:Clone()
 		new_tag.Parent = humanoid
 	end
 end
 
 function untagHumanoid(humanoid)
 	if humanoid ~= nil then
-		local tag = humanoid:findFirstChild("creator")
+		local tag = humanoid:FindFirstChild("creator")
 		if tag ~= nil then
 			tag.Parent = nil
 		end
