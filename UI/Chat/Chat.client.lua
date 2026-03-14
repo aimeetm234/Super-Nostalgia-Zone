@@ -8,6 +8,15 @@ local TextChatService = game:GetService("TextChatService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local localPlayer = Players.LocalPlayer
+local canUseChatBar
+do
+	local success, result = pcall(function()
+		return TextChatService:CanUserChatAsync(localPlayer.UserId)
+	end)
+	canUseChatBar = success and result or false
+end
+
 local chat = script.Parent
 local util = chat:WaitForChild("Utility")
 
@@ -20,6 +29,21 @@ local messageTemplate = util:WaitForChild("MessageTemplate")
 local TextChannels = TextChatService:WaitForChild("TextChannels")
 local LinkedList = require(util:WaitForChild("LinkedList"))
 local SafeChat = require(ReplicatedStorage.SafeChat)
+
+local screenGui = chat.Parent
+local chatPadding = screenGui:WaitForChild("ChatPadding")
+
+local remote = ReplicatedStorage:WaitForChild("SuperSafeChatRemote")
+local remote2 = ReplicatedStorage:WaitForChild("CanUsersChatAsync")
+
+--------------------------------------------------------------------------------------------------------------------------------------
+-- Template for system messages
+--------------------------------------------------------------------------------------------------------------------------------------
+
+local SYSMSG_TEMPLATE = {
+	Name = "(ROBLOX)",
+	TeamColor = BrickColor.new("Really black")
+}
 
 --------------------------------------------------------------------------------------------------------------------------------------
 -- Player Colors
@@ -36,28 +60,32 @@ local PLAYER_COLORS = {
 	[7] = Color3.fromRGB(233, 222, 187); -- tan
 }
 
-local function computePlayerColor(player)
-	if player.Team then
-		return player.TeamColor.Color
+local function computePlayerColor(player, isSystemMessage)
+	if isSystemMessage then
+		return SYSMSG_TEMPLATE.TeamColor.Color
 	else
-		local pName = player.Name
-		local length = #pName
-		
-		local oddShift = (1 - (length % 2))
-		local value = 0
-		
-		for i = 1, length do
-			local char = pName:sub(i, i):byte()
-			local rev = (length - i) + oddShift
-			
-			if (rev % 4) >= 2 then
-				value = value - char
-			else
-				value = value + char	
-			end 
+		if player.Team then
+			return player.TeamColor.Color
+		else
+			local pName = player.Name
+			local length = #pName
+
+			local oddShift = (1 - (length % 2))
+			local value = 0
+
+			for i = 1, length do
+				local char = pName:sub(i, i):byte()
+				local rev = (length - i) + oddShift
+
+				if (rev % 4) >= 2 then
+					value = value - char
+				else
+					value = value + char	
+				end 
+			end
+
+			return PLAYER_COLORS[value % 8]
 		end
-		
-		return PLAYER_COLORS[value % 8]
 	end
 end
 
@@ -99,11 +127,11 @@ local function onChatFocusLost(enterPressed)
 			msg = msg:sub(1, 125) .. "..."
 		end
 
-		local player = Players.LocalPlayer
+		local isSafeChatMessage = false
 		local channel = TextChannels:FindFirstChild("RBXGeneral")
 
 		if msg:sub(1, 1) == "%" then
-			local teamColor = player.TeamColor
+			local teamColor = localPlayer.TeamColor
 			local teamChannel = TextChannels:FindFirstChild(`RBXTeam{teamColor.Name}`)
 
 			if teamChannel then
@@ -112,6 +140,7 @@ local function onChatFocusLost(enterPressed)
 
 			msg = msg:sub(2)
 		elseif msg:sub(1, 3) == "/sc" then
+			isSafeChatMessage = true
 			local indices = msg:sub(4):split(" ")
 			local tree = SafeChat
 
@@ -125,13 +154,22 @@ local function onChatFocusLost(enterPressed)
 
 		if channel and channel:IsA("TextChannel") then
 			channel:SendAsync(msg)
+			if isSafeChatMessage then
+				remote:FireServer(msg, channel)
+			end
 		end
 	end
 end
 
-chatBar.Focused:Connect(beginChatting)
-chatBar.FocusLost:Connect(onChatFocusLost)
-UserInputService.InputBegan:Connect(onInputBegan)
+if canUseChatBar then
+	chatBar.Focused:Connect(beginChatting)
+	chatBar.FocusLost:Connect(onChatFocusLost)
+	UserInputService.InputBegan:Connect(onInputBegan)
+else
+	chatBar.Visible = false
+	mainBackdrop.Visible = false
+	chatPadding:Destroy()
+end
 
 --------------------------------------------------------------------------------------------
 -- Chat Output
@@ -145,29 +183,56 @@ local function getMessageId()
 	return messageId
 end
 
-local function onIncomingMessage(message: TextChatMessage)
+-- Credits to 0xabcdef1234 for this function
+-- https://devforum.roblox.com/t/typewriter-effect-new-property-maxvisiblegraphemes-live/1092043
+local function removeTags(str)
+	-- replace line break tags (otherwise grapheme loop will miss those linebreak characters)
+	str = str:gsub("<br%s*/>", "\n")
+	return (str:gsub("<[^<>]->", ""))
+end
+
+local function formatMessage(str)
+	str = removeTags(str)
+	return str:gsub("#[# ]+#", "[ Content Deleted ]")
+end
+
+local function onIncomingMessage(message: TextChatMessage, isSuperSafeChat: boolean?)
+	local isSystemMessage = false
 	local source = message.TextSource
 	local player = source and Players:GetPlayerByUserId(source.UserId)
 
 	if not player then
-		return
+		isSystemMessage = true
+		player = SYSMSG_TEMPLATE
+	else
+		local canChat = canUseChatBar and remote2:InvokeServer(player.UserId)
+		if not isSuperSafeChat then
+			canChat = canUseChatBar and remote2:InvokeServer(player.UserId)
+		else
+			canChat = not canUseChatBar
+		end
+		if not canChat then
+			return
+		end
 	end
 
-	local text = message.Text
-	text = text:gsub("#[# ]+#", "[ Content Deleted ]")
-
+	local text = formatMessage(message.Text)
+	
 	-- Create the message
 	local msg = messageTemplate:Clone()
-	
+
 	local playerLbl = msg:WaitForChild("PlayerName")
-	playerLbl.TextColor3 = computePlayerColor(player)
+	playerLbl.TextColor3 = computePlayerColor(player, isSystemMessage)
 	playerLbl.TextStrokeColor3 = playerLbl.TextColor3
 	playerLbl.AutomaticSize = Enum.AutomaticSize.XY
 	playerLbl.Text = player.Name .. ";  "
-	
+
 	local msgLbl = msg:WaitForChild("Message")
 	msgLbl.AutomaticSize = Enum.AutomaticSize.XY
 	msgLbl.Text = text
+	if isSystemMessage then
+		msgLbl.TextColor3 = player.TeamColor.Color
+	end
 
 	msg.AutomaticSize = Enum.AutomaticSize.X
 	msg.LayoutOrder = getMessageId()
@@ -187,5 +252,6 @@ local function onIncomingMessage(message: TextChatMessage)
 end
 
 TextChatService.MessageReceived:Connect(onIncomingMessage)
+remote.OnClientEvent:Connect(onIncomingMessage)
 
 --------------------------------------------------------------------------------------------

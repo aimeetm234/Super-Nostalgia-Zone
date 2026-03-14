@@ -2,9 +2,14 @@ local UserInputService = game:GetService("UserInputService")
 local GuiService = game:GetService("GuiService")
 
 local function addUIScale(obj, scale)
-	local uiScale = Instance.new("UIScale")
+	-- If a UIScale already exists, just use that
+	wait()
+	local uiScale = obj:FindFirstChildOfClass("UIScale")
+	if not uiScale then -- Otherwise, create one
+		uiScale = Instance.new("UIScale")
+		uiScale.Parent = obj
+	end
 	uiScale.Scale = scale
-	uiScale.Parent = obj
 end
 
 if GuiService:IsTenFootInterface() then
@@ -17,6 +22,8 @@ if GuiService:IsTenFootInterface() then
 	local backpack = ui:WaitForChild("Backpack")
 	backpack.Position = UDim2.new(0, 0, 1, 0)
 	
+	-- Chat is allowed on console now, so stuff relating to chat will be commented out
+	--[[
 	local chat = ui:WaitForChild("Chat")
 	chat.Visible = false
 	
@@ -28,6 +35,7 @@ if GuiService:IsTenFootInterface() then
 
 	local safeChat = ui:WaitForChild("SafeChat")
 	safeChat.Visible = false
+	--]]
 	
 	local health = ui:WaitForChild("Health")
 	addUIScale(health, 1.5)

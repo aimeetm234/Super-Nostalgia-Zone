@@ -9,6 +9,8 @@ local chatButton = safeChat:WaitForChild("ChatButton")
 local click = chatButton:WaitForChild("Click")
 local gamepadHint = chatButton:WaitForChild("Hint")
 
+local remote = ReplicatedStorage:WaitForChild("SuperSafeChatRemote")
+
 local IMG_CHAT = "rbxassetid://991182833"
 local IMG_CHAT_DN = "rbxassetid://991182832"
 local IMG_CHAT_OVR = "rbxassetid://991182834"
@@ -103,6 +105,7 @@ local function assembleTree(tree)
 
 				if rbxGeneral and rbxGeneral:IsA("TextChannel") then
 					rbxGeneral:SendAsync(label)
+					remote:FireServer(label, rbxGeneral)
 				end
 
 				click:Play()
