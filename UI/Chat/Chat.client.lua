@@ -28,7 +28,7 @@ local messageTemplate = util:WaitForChild("MessageTemplate")
 
 local TextChannels = TextChatService:WaitForChild("TextChannels")
 local LinkedList = require(util:WaitForChild("LinkedList"))
-local SafeChat = require(ReplicatedStorage.SafeChat)
+local SafeChat = require(ReplicatedStorage:WaitForChild("SafeChat"))
 
 local screenGui = chat.Parent
 local chatPadding = screenGui:WaitForChild("ChatPadding")
