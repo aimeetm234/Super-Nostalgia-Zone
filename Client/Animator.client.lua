@@ -276,6 +276,6 @@ local function updateAnimations()
 	end
 end
 
-RunService.Stepped:Connect(updateAnimations)
+RunService.PreSimulation:Connect(updateAnimations)
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

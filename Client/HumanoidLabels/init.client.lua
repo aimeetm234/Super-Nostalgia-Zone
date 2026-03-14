@@ -95,7 +95,7 @@ local function setupHumanoid(h)
 					end
 				end
 				
-				updateCon = rs.RenderStepped:Connect(update)
+				updateCon = rs.PreRender:Connect(update)
 				currentHealth = health
 				h.DisplayDistanceType = "None"
 			end

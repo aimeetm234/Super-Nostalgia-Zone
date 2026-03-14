@@ -61,7 +61,7 @@ for _,v in pairs(ffAdorns:GetChildren()) do
 	onChildAdded(v)
 end
 
-RunService.Heartbeat:Connect(update)
+RunService.PostSimulation:Connect(update)
 
 ffAdorns.ChildAdded:Connect(onChildAdded)
 ffAdorns.ChildRemoved:Connect(onChildRemoved)

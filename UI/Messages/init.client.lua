@@ -63,7 +63,7 @@ local function addMessage(sourceMsg, msgType)
 	--]]
 
 	if msgType == "Hint" then
-		RunService.Heartbeat:Wait()
+		RunService.PostSimulation:Wait()
 		sourceMsg.Parent = hintBin
 	end
 	

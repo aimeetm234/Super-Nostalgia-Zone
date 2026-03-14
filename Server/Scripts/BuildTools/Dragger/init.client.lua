@@ -184,7 +184,7 @@ local function startDraggerAction(mPart)
 				end
 			end
 			
-			RunService.Heartbeat:Wait()
+			RunService.PostSimulation:Wait()
 		end
 		
 		selection.Transparency = 1

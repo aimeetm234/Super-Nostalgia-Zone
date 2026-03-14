@@ -58,4 +58,4 @@ local function update(dt)
 	end
 end
 
-updateCon = RunService.RenderStepped:Connect(update)
+updateCon = RunService.PreRender:Connect(update)

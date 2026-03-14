@@ -318,7 +318,7 @@ local function createBevels(part, initializing)
 		overload = overload + 1
 		
 		if overload % 10 == 0 then
-			RunService.Heartbeat:Wait()
+			RunService.PostSimulation:Wait()
 		end
 	end
 	

@@ -126,7 +126,7 @@ local function onSoundMounted(humanoid)
 						end
 					end
 					
-					RunService.Heartbeat:Wait()
+					RunService.PostSimulation:Wait()
 				end
 			end
 			

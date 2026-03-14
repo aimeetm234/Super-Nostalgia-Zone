@@ -178,7 +178,7 @@ end
 
 container.ChildAdded:Connect(onContainerChildAdded)
 container.ChildRemoved:Connect(onContainerChildRemoved)
-RunService.Heartbeat:Connect(updateBackdrop)
+RunService.PostSimulation:Connect(updateBackdrop)
 
 --------------------------------------------------------------------------------------------------------------------------------------
 -- Header Size Stuff
