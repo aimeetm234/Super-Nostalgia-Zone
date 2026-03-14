@@ -12,9 +12,10 @@ local function deleteSound(sound)
 	Debris:AddItem(sound, 0.1)
 end
 
-local function setSoundId(soundId, andThen)
+local function setSoundId(soundId, andThen, useRbxAssetId)
+	local prefix = useRbxAssetId and "rbxassetid://" or "rbxasset://sounds/"
 	return function (sound, humanoid)
-		sound.SoundId = "rbxasset://sounds/" .. soundId
+		sound.SoundId = prefix .. soundId
 		sound.Pitch = 1
 		
 		if andThen then
@@ -30,18 +31,10 @@ local function mountSoundToState(sound)
 	end
 end
 
-local function createSound(name, fileName, parent)
+local function createSound(name, fileName, parent, useRbxAssetId)
+	local prefix = useRbxAssetId and "rbxassetid://" or "rbxasset://sounds/"
 	local sound = Instance.new("Sound")
-	sound.SoundId = "rbxasset://sounds/" .. fileName
-	sound.Parent = parent
-	sound.Name = name
-	
-	return sound
-end
-
-local function createSound2(name, fileName, parent)
-	local sound = Instance.new("Sound")
-	sound.SoundId = "rbxassetid://" .. fileName
+	sound.SoundId = prefix .. fileName
 	sound.Parent = parent
 	sound.Name = name
 	
@@ -94,7 +87,7 @@ local function onSoundMounted(humanoid)
 		local fallingDown = createSound("FallingDown", "splat.wav", rootPart)
 		humanoid.FallingDown:Connect(mountSoundToState(fallingDown))
 		
-		local freeFalling = createSound2("FreeFall", "12222200", rootPart)
+		local freeFalling = createSound("FreeFall", "12222200", rootPart, true)
 		humanoid.FreeFalling:Connect(mountSoundToState(freeFalling))
 		
 		for soundName, soundAction in pairs(soundActions) do
