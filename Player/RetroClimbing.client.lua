@@ -2,6 +2,9 @@
 -- Setup
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RaygionUtil = require(ReplicatedStorage:WaitForChild("RaygionUtil"))
+
 local char = script.Parent
 
 local humanoid = char:WaitForChild("Humanoid")
@@ -112,7 +115,7 @@ local function findPartInLadderZone()
 	local max = Vector3.new(radius, top, radius)
 	
 	local extents = Region3.new(center + min, center + max)
-	local parts = workspace:FindPartsInRegion3(extents, char)
+	local parts = RaygionUtil:FindPartsInRegion3(extents, char)
 	
 	if isDevTest then
 		if #parts > 0 then
@@ -162,7 +165,7 @@ local function findLadder()
 		local casterDirection = torsoLook * ladderSearchDist
 		
 		local ray = Ray.new(casterOrigin, casterDirection)
-		local hitPrim, hitLoc = workspace:FindPartOnRay(ray, char)
+		local hitPrim, hitLoc = RaygionUtil:FindPartOnRay(ray, char)
 		
 		-- make trusses climbable.
 		if hitPrim and hitPrim:IsA("TrussPart") then

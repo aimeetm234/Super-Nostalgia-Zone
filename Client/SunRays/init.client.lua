@@ -1,6 +1,9 @@
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 local TeleportService = game:GetService("TeleportService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local RaygionUtil = require(ReplicatedStorage:WaitForChild("RaygionUtil"))
 
 local adorn = script:WaitForChild("Rays")
 local sunRays = adorn:WaitForChild("SunRays")
@@ -33,7 +36,7 @@ local function computeSunVisibility()
 				local sunRay = camera:ViewportPointToRay(posX, posY)
 				sunRay = projectRay(sunRay, 5000)
 
-				local hit, pos = workspace:FindPartOnRay(sunRay, camera)
+				local hit, pos = RaygionUtil:FindPartOnRay(sunRay, camera)
 
 				if not hit then
 					visibility = visibility + 1

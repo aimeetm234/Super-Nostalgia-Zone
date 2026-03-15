@@ -1,6 +1,9 @@
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
 local TeleportService = game:GetService("TeleportService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local RaygionUtil = require(ReplicatedStorage:WaitForChild("RaygionUtil"))
 
 local camera = workspace.CurrentCamera
 local lensFlareNode = camera:FindFirstChild("LensFlareNode")
@@ -53,7 +56,7 @@ local function computeSunOcclusion(sunPos)
 				local sunRay = camera:ViewportPointToRay(posX, posY)
 				sunRay = projectRay(sunRay, 5000)
 
-				local hit, pos = workspace:FindPartOnRay(sunRay, camera)
+				local hit, pos = RaygionUtil:FindPartOnRay(sunRay, camera)
 
 				if not hit then
 					visibility = visibility + 1

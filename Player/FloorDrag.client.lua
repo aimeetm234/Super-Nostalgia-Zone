@@ -1,4 +1,7 @@
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local RaygionUtil = require(ReplicatedStorage:WaitForChild("RaygionUtil"))
 
 local char = script.Parent
 local humanoid = char:WaitForChild("Humanoid")
@@ -19,7 +22,7 @@ end
 local function getFloorLevel()
 	local origin = rootPart.Position
 	local ray = Ray.new(origin, rayDown)
-	local hit, pos = workspace:FindPartOnRay(ray, char)
+	local hit, pos = RaygionUtil:FindPartOnRay(ray, char)
 	return pos.Y, math.clamp(math.abs(pos.Y - origin.Y), -1, 1)
 end
 

@@ -1,4 +1,7 @@
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local RaygionUtil = require(ReplicatedStorage:WaitForChild("RaygionUtil"))
 
 local char = script.Parent
 local rootPart = char:WaitForChild("HumanoidRootPart")
@@ -20,7 +23,7 @@ while wait() do
 	local startPos = start.Position
 	local startRay = Ray.new(startPos, start.LookVector * 5)
 	
-	local hit, pos, norm = workspace:FindPartOnRay(startRay, char)
+	local hit, pos, norm = RaygionUtil:FindPartOnRay(startRay, char)
 	local floorCheckRay
 	
 	local pass = false
@@ -28,7 +31,7 @@ while wait() do
 	if hit and hit.CanCollide and hit:IsGrounded() then
 		if hit:IsA("UnionOperation") or (not hit:IsA("Part") or hit.Shape.Name == "Block") then
 			local floorCheckRay = Ray.new(pos - (norm / 5), down)
-			local floor, floorPos = workspace:FindPartOnRayWithIgnoreList(floorCheckRay, {char, hit})
+			local floor, floorPos = RaygionUtil:FindPartOnRayWithIgnoreList(floorCheckRay, {char, hit})
 			
 			if floor and floor.CanCollide and startPos.Y - 2 > floorPos.Y then
 				floorPos = floorPos + platformOffset
