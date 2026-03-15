@@ -21,9 +21,9 @@ local floor = math.floor
 local clamp = math.clamp
 
 local function serializeColor3(color)
-	local r = clamp(floor(color.r * 256), 0, 255)
-	local g = clamp(floor(color.g * 256), 0, 255)
-	local b = clamp(floor(color.b * 256), 0, 255)
+	local r = clamp(floor(color.R * 256), 0, 255)
+	local g = clamp(floor(color.G * 256), 0, 255)
+	local b = clamp(floor(color.B * 256), 0, 255)
 	return r .. g .. b
 end
 
