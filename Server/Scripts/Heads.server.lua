@@ -11,7 +11,7 @@ local function processObject(obj)
 				face.Texture = "rbxassetid://1104210678"
 			end
 			obj.Name = "MeshHead"
-			obj.MeshId = "rbxassetid://1104623876"
+			obj.MeshId = "rbxassetid://6906738205"
 			obj.Scale = obj.Scale * head.Size.Y
 			for _,surface in pairs(Enum.NormalId:GetEnumItems()) do
 				head[surface.Name .. "Surface"] = 0
