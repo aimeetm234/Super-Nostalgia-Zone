@@ -152,6 +152,14 @@ local SAVE_ON_LEAVE = true
 -- Debug flag, for internal debugging
 local DEBUG = false
 
+-- DebugUserId
+local DebugUserId = script:FindFirstChild("DebugUserId")
+
+-- Services
+local DataStoreService
+local PlayersService = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
 -- Check if we are able to use DataStores.
 if game.GameId < 1 then
 	warn("Game is not connected to a universe, cannot load DataStores.")
@@ -159,7 +167,7 @@ if game.GameId < 1 then
 end
 
 local success,errorMsg = pcall(function ()
-	local DataStoreService = game:GetService("DataStoreService")
+	DataStoreService = game:GetService("DataStoreService")
 	wait()
 	DataStoreService:GetGlobalDataStore()
 end)
@@ -362,7 +370,6 @@ function PlayerDataStore.new()
 	--===============================================--
 	
 	-- The actual data store we are writing to
-	local DataStoreService = game:GetService('DataStoreService')
 	local mDataStore = DataStoreService:GetDataStore(DATASTORE_NAME)
 	
 	-- The weak-reference to each player's data, so
@@ -398,8 +405,8 @@ function PlayerDataStore.new()
 	--===============================================--
 	-- transform a userId into a data store key
 	local function userIdToKey(userId)
-		if script:FindFirstChild("DebugUserId") and game.JobId == "" then
-			return "PlayerList$" .. script.DebugUserId.Value
+		if DebugUserId and game.JobId == "" then
+			return "PlayerList$" .. DebugUserId.Value
 		else
 			return 'PlayerList$'..userId
 		end
@@ -675,13 +682,11 @@ function PlayerDataStore.new()
 			mOnlinePlayerSaveDataMap[player] = saveData
 		end 
 	end
-	game.Players.PlayerAdded:Connect(HandlePlayer)
-	for _, player in pairs(game.Players:GetPlayers()) do
-		if player:IsA('Player') then
-			HandlePlayer(player)
-		end
+	PlayersService.PlayerAdded:Connect(HandlePlayer)
+	for _, player in pairs(PlayersService:GetPlayers()) do
+	    HandlePlayer(player)
 	end
-	game.Players.PlayerRemoving:Connect(function(player)
+	PlayersService.PlayerRemoving:Connect(function(player)
 		-- remove the strong-reference when they leave.
 		local oldSaveData = mOnlinePlayerSaveDataMap[player]
 		mOnlinePlayerSaveDataMap[player] = nil
@@ -700,8 +705,6 @@ function PlayerDataStore.new()
 	end)
 	
 	-- when the game shuts down, save all data
-	local RunService = game:GetService("RunService")
-	
 	game:BindToClose(function ()
 		if DEBUG then print("PlayerDataStore> OnClose Shutdown\n\tFlushing...") end
 		
@@ -786,7 +789,7 @@ function PlayerDataStore.new()
 	end
 	
 	function this:IsEmulating()
-		return (script:FindFirstChild("DebugUserId") and game.JobId == "")
+		return (DebugUserId and game.JobId == "")
 	end
 	
 	-- Save out all unsaved changes at the time of 
