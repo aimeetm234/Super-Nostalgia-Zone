@@ -15,6 +15,8 @@ local IMG_CHAT = "rbxassetid://991182833"
 local IMG_CHAT_DN = "rbxassetid://991182832"
 local IMG_CHAT_OVR = "rbxassetid://991182834"
 
+local isActivated = false
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Fetch Tree Data
 
@@ -42,6 +44,7 @@ local function recursivelyDeactivateTree(obj)
 end
 
 local function deactivateRootTree()
+	isActivated = false
 	chatButton.Image = IMG_CHAT
 	recursivelyDeactivateTree(rootTree)
 	
@@ -52,6 +55,7 @@ local function deactivateRootTree()
 end
 
 local function activateRootTree()
+	isActivated = true
 	rootTree.Visible = true
 	chatButton.Image = IMG_CHAT_DN
 	
@@ -127,7 +131,6 @@ rootTree.Parent = chatButton
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Button State
 
-local isActivated = false
 local isHovering = false
 
 do
@@ -142,7 +145,6 @@ do
 		if not isActivated then
 			chatButton.Image = IMG_CHAT
 		end
-
 		isHovering = false
 	end
 	
