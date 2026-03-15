@@ -5,6 +5,7 @@ local Players = game:GetService("Players")
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+local itemChanged = require(ReplicatedStorage:WaitForChild("ItemChanged"))
 local brickColors = require(ReplicatedStorage:WaitForChild("BrickColors"))
 local oldColors = {}
 
@@ -284,6 +285,6 @@ for _,desc in pairs(workspace:GetDescendants()) do
 end
 
 workspace.DescendantAdded:Connect(onDescendantAdded)
-game.ItemChanged:Connect(onItemChanged)
+itemChanged:Connect(onItemChanged)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
