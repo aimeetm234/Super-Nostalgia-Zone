@@ -200,6 +200,8 @@ local function applyCharacter(humanoid)
 		for _,v in pairs(model:GetDescendants()) do
 			if v:IsA("SpecialMesh") and v.MeshType == Enum.MeshType.Brick then
 				v:Destroy()
+			elseif v:IsA("BasePart") then
+				v.Material = "SmoothPlastic"
 			end
 		end
 		
