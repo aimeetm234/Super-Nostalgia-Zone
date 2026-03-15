@@ -6,10 +6,6 @@ local function processObject(obj)
 		local thickness = head.Size.Y/col
 
 		if math.abs(thickness-1) <= 0.01 then
-			local face = head:FindFirstChild("face")
-			if face and face.Texture:lower() == "rbxasset://textures/face.png" then
-				face.Texture = "rbxassetid://1104210678"
-			end
 			obj.Name = "MeshHead"
 			obj.MeshId = "rbxassetid://6906738205"
 			obj.Scale = obj.Scale * head.Size.Y

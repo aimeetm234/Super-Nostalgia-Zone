@@ -255,8 +255,13 @@ local function onDescendantAdded(desc)
 				registerPartSurfaces(desc)
 			end
 		end
-	elseif desc:IsA("Decal") and desc.Texture:lower() == "rbxasset://textures/spawnlocation.png" then
-		desc.Texture = "rbxassetid://989514407"
+	elseif desc:IsA("Decal") then
+		local currentTexture = desc.Texture:lower()
+		if currentTexture == "rbxasset://textures/spawnlocation.png" then
+			desc.Texture = "rbxassetid://989514407"
+		elseif currentTexture == "rbxasset://textures/face.png" then
+			desc.Texture = "rbxassetid://1104210678"
+		end
 	elseif desc:IsA("Humanoid") then
 		applyCharacter(desc)
 	end
