@@ -72,8 +72,7 @@ local function GetLargestCutoffDistance(currentFocus: CFrame, goalCFrame: CFrame
 	local origin = currentFocus.Position
 
 	local params = RaycastParams.new()
-	params.FilterDescendantsInstances = ignoreList or {}
-	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.ExcludeInstances = ignoreList or {}
 
 	-- Camera bounds
 	local cameraOffsets = {

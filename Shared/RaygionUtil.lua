@@ -45,9 +45,9 @@ local function BaseCastRay(RayToUse: Ray, Ignore: Instance? | Instances?, Ignore
 	else			
 		assert(type(WhiteList) == "boolean", "Optional argument 4 expects a boolean")
 	end
+	local FilterType = WhiteList and "Include" or "Exclude"
 	local Params = NewRaycastParams()
-	Params.FilterType = WhiteList and Enum.RaycastFilterType.Include or Enum.RaycastFilterType.Exclude
-	Params.FilterDescendantsInstances = PrepareForFilter(Ignore)
+	Params[FilterType .. "Instances"] = PrepareForFilter(Ignore)
 	Params.IgnoreWater = IgnoreWater
 	local Cast = Raycast(Workspace, RayToUse.Origin, RayToUse.Direction, Params)
 	if Cast then
@@ -73,9 +73,9 @@ local function BaseCastRegion(Region: Region3, Ignore: Instance? | Instances?, M
 	else			
 		assert(type(WhiteList) == "boolean", "Optional argument 4 expects a boolean")
 	end
+	local FilterType = WhiteList and "Include" or "Exclude"
 	local Params = NewOverlapParams()
-	Params.FilterType = WhiteList and Enum.RaycastFilterType.Include or Enum.RaycastFilterType.Exclude
-	Params.FilterDescendantsInstances = PrepareForFilter(Ignore)
+	Params[FilterType .. "Instances"] = PrepareForFilter(Ignore)
 	Params.MaxParts = MaxParts
 	return GetPartBoundsInBox(Workspace, Region.CFrame, Region.Size, Params)
 end
