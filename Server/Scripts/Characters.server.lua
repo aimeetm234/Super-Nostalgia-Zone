@@ -105,10 +105,10 @@ local function onCharacterAdded(char)
 		
 		wait(5)
 		
-		local player = game.Players:GetPlayerFromCharacter(char)
+		local player = Players:GetPlayerFromCharacter(char)
 		
 		if player then
-			player:LoadCharacter()
+			player:LoadCharacterAsync()
 		end
 	end
 	
@@ -210,7 +210,7 @@ end
 
 local function onRequestCharacter(player)
 	if not player.Character then
-		player:LoadCharacter()
+		player:LoadCharacterAsync()
 	end
 end
 
